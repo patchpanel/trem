@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="trem:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/trem_jar</output-path>
+    <root id="archive" name="trem.jar">
+      <element id="module-output" name="trem" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/themes/synthetica.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/themes/syntheticaPlain.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/themes/syntheticaBlueIce.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

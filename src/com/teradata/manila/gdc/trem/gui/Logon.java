@@ -1,18 +1,18 @@
 package com.teradata.manila.gdc.trem.gui;
 
 import com.teradata.manila.gdc.trem.core.Main;
-import com.teradata.manila.gdc.trem.util.Utilities;
 import com.teradata.manila.gdc.trem.security.Authenticator;
-import de.javasoft.plaf.synthetica.SyntheticaPlainLookAndFeel;
+import com.teradata.manila.gdc.trem.util.Utilities;
 import de.javasoft.plaf.synthetica.SyntheticaBlueIceLookAndFeel;
+import de.javasoft.plaf.synthetica.SyntheticaPlainLookAndFeel;
+
+import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.net.UnknownHostException;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
@@ -28,6 +28,8 @@ public class Logon extends javax.swing.JDialog {
      */
     private String message = "";
     private boolean opMode = false;
+    private javax.swing.JPasswordField passwordField;
+    private javax.swing.JTextField textFieldUsername;
 
     public Logon(java.awt.Frame parent, boolean modal, boolean mode) {
         super(parent, modal);
@@ -45,8 +47,10 @@ public class Logon extends javax.swing.JDialog {
     private void initComponents() {
 
         textFieldUsername = new javax.swing.JTextField();
-        logonButton = new javax.swing.JButton();
-        cancelButton = new javax.swing.JButton();
+        javax.swing.JButton logonButton = new javax.swing.JButton();
+        /*
+      */
+        javax.swing.JButton cancelButton = new javax.swing.JButton();
         passwordField = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -64,19 +68,11 @@ public class Logon extends javax.swing.JDialog {
 
         logonButton.setText("Logon");
         logonButton.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        logonButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                logonButtonActionPerformed(evt);
-            }
-        });
+        logonButton.addActionListener(evt -> logonButtonActionPerformed(evt));
 
         cancelButton.setText("Cancel");
         cancelButton.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        cancelButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cancelButtonActionPerformed(evt);
-            }
-        });
+        cancelButton.addActionListener(evt -> cancelButtonActionPerformed(evt));
 
         passwordField.setToolTipText("");
         passwordField.setBorder(javax.swing.BorderFactory.createTitledBorder("Password"));
@@ -138,16 +134,6 @@ public class Logon extends javax.swing.JDialog {
             preAuth();
         }
     }//GEN-LAST:event_textFieldUsernameKeyPressed
-
-    /**
-     * @param args the command line arguments
-     */
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton cancelButton;
-    private javax.swing.JButton logonButton;
-    private javax.swing.JPasswordField passwordField;
-    private javax.swing.JTextField textFieldUsername;
     // End of variables declaration//GEN-END:variables
 
     private void preAuth() {
@@ -156,7 +142,7 @@ public class Logon extends javax.swing.JDialog {
 
         if (userName.length() <= 0 || password.length <= 0) {
             JOptionPane.showMessageDialog(this, "Username or Password cannot be blank.", "Invalid Credentials", JOptionPane.WARNING_MESSAGE);
-        } else if (this.opMode == true) {
+        } else if (this.opMode) {
             //god mode
             String userNameNT = new com.sun.security.auth.module.NTSystem().getName();
 
@@ -187,7 +173,7 @@ public class Logon extends javax.swing.JDialog {
         String now = new java.text.SimpleDateFormat("[MM/dd/yyyy HH:mm:ss]").format(new java.util.Date());
 
         Authenticator auth = new Authenticator(username, String.valueOf(password).trim());
-        if (auth.authenticate() == true) {
+        if (auth.authenticate()) {
             message += now + " Logon Success for " + textFieldUsername.getText().trim() + "\n";
             showMainFrame(message, this.opMode);
             this.setVisible(false);
@@ -208,7 +194,7 @@ public class Logon extends javax.swing.JDialog {
         //Before anything else, kill them all!!!
         Utilities.killRunningProcess();
 
-        if (opMode == true) {
+        if (opMode) {
             try {
                 javax.swing.UIManager.setLookAndFeel(new SyntheticaBlueIceLookAndFeel());
             } catch (UnsupportedLookAndFeelException | ParseException ex) {
@@ -229,5 +215,5 @@ public class Logon extends javax.swing.JDialog {
         });
     }
 
-    private static final Logger LOG = Logger.getLogger(Logon.class.getName());
+    // --Commented out by Inspection (5/2/2016 8:53 PM):private static final Logger LOG = Logger.getLogger(Logon.class.getName());
 }
