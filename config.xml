@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>Directories</comment>
+<entry key="archivedir">C:\trem\archive</entry>
+<entry key="outputdir">C:\trem\out</entry>
+<entry key="emailallscript">SendMailAll.ps1</entry>
+<entry key="rootdir">c:\trem</entry>
+<entry key="lastbatchid">201604</entry>
+<entry key="inputdir">c:\trem\in</entry>
+<entry key="emailto">jl186034@teradata.com</entry>
+<entry key="emailbody">in-script</entry>
+<entry key="emailmanagerscript">SendMail2.ps1</entry>
+<entry key="smtpserver">localhost</entry>
+<entry key="txtresourcelist">ResourceList.txt</entry>
+<entry key="tempdir">c:\trem\temp</entry>
+<entry key="excelresourcelist">GDC Manila Resource List template v1 0.xlsx</entry>
+<entry key="emailfrom">jl186034@teradata.com</entry>
+<entry key="extractresourcelistscript">ExtractResourceList.vbs</entry>
+<entry key="extractmanagerscript">ExtractGroupReports.vbs</entry>
+<entry key="emailindividualscript">SendMailIndividual.ps1</entry>
+<entry key="detailrawsheet">Detailed Raw</entry>
+<entry key="logdir">c:\trem\log</entry>
+<entry key="extractindividualscript">ExtractIndividualReports.vbs</entry>
+<entry key="tagmngrrept">Practice</entry>
+<entry key="txtmanagerlist">ManagersList.txt</entry>
+<entry key="archivescript">Archiver.ps1</entry>
+<entry key="archivedays">0</entry>
+<entry key="bindir">c:\trem\bin</entry>
+<entry key="summarysheet">Summary</entry>
+<entry key="detailentexpairsheet">Detailed Entry Exit Pair</entry>
+<entry key="excelbadgereport">201603 - BDG_TimeReport_V2.xlsx</entry>
+</properties>
