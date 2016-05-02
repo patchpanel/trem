@@ -1,37 +1,38 @@
 package com.teradata.manila.gdc.trem.gui;
 
-import com.teradata.manila.gdc.trem.core.ArchiveProcess;
+import com.teradata.manila.gdc.trem.core.*;
 import com.teradata.manila.gdc.trem.util.CustomOutputStream;
-import com.teradata.manila.gdc.trem.core.EmailProcess;
-import com.teradata.manila.gdc.trem.core.ExtractProcess;
-import com.teradata.manila.gdc.trem.core.PropertiesFile;
 import com.teradata.manila.gdc.trem.util.ScriptLogger;
 import com.teradata.manila.gdc.trem.util.Utilities;
-import com.teradata.manila.gdc.trem.core.WholeProcess;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.logging.Logger;
+
 import javax.imageio.ImageIO;
-import javax.swing.JOptionPane;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
+import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 /**
  *
  * @author jl186034
  */
-public class MainFrame extends javax.swing.JFrame {
+class MainFrame extends javax.swing.JFrame {
 
     private static final int PARAMETER_COL = 0;
     private boolean opMode = false;
     private boolean periodClose;
+    private javax.swing.JMenuItem closePeriodMenutItem;
+    private javax.swing.JTextArea commandTextArea;
+    private javax.swing.JCheckBox emailReportsCheckBox;
+    private javax.swing.JCheckBox extractReportsCheckBox;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTable parameterTable;
+    private javax.swing.JButton processButton;
 
     /**
      *
      */
-    public MainFrame() {
+    private MainFrame() {
         super();
     }
 
@@ -78,43 +79,41 @@ public class MainFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        configurationPanel = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        javax.swing.JPanel configurationPanel = new javax.swing.JPanel();
+        javax.swing.JScrollPane jScrollPane1 = new javax.swing.JScrollPane();
         parameterTable = new javax.swing.JTable() {
             private static final long serialVersionUID = 1L;
 
             public boolean isCellEditable(int row, int column) {
-                if (opMode == true) {
-                    if (column == 0) return false;
-                    return true;
+                if (opMode) {
+                    return column != 0;
                 } else {
                     if (row == 6 && column == 1) return true;
                     if (row == 7 && column == 1) return true;
                     if (row == 14 && column == 1) return true;
                     if (row == 21 && column == 1) return true;
                     if (row == 24 && column == 1) return true;
-                    if (row == 25 && column == 1) return true;
-                    return false;
+                    return row == 25 && column == 1;
                 }
-            };
+            }
         };
         extractReportsCheckBox = new javax.swing.JCheckBox();
         emailReportsCheckBox = new javax.swing.JCheckBox();
-        processingPanel = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        javax.swing.JPanel processingPanel = new javax.swing.JPanel();
+        javax.swing.JScrollPane jScrollPane2 = new javax.swing.JScrollPane();
         commandTextArea = new javax.swing.JTextArea();
         commandTextArea.setEditable(false);
         processButton = new javax.swing.JButton();
-        menuBar = new javax.swing.JMenuBar();
-        fileMenu = new javax.swing.JMenu();
-        saveMenuItem = new javax.swing.JMenuItem();
-        jSeparator2 = new javax.swing.JPopupMenu.Separator();
-        archiveMenuItem = new javax.swing.JMenuItem();
+        javax.swing.JMenuBar menuBar = new javax.swing.JMenuBar();
+        javax.swing.JMenu fileMenu = new javax.swing.JMenu();
+        javax.swing.JMenuItem saveMenuItem = new javax.swing.JMenuItem();
+        javax.swing.JPopupMenu.Separator jSeparator2 = new javax.swing.JPopupMenu.Separator();
+        javax.swing.JMenuItem archiveMenuItem = new javax.swing.JMenuItem();
         closePeriodMenutItem = new javax.swing.JMenuItem();
-        jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        exitMenuItem = new javax.swing.JMenuItem();
-        helpMenu = new javax.swing.JMenu();
-        aboutMenuItem = new javax.swing.JMenuItem();
+        javax.swing.JPopupMenu.Separator jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
+        javax.swing.JMenu helpMenu = new javax.swing.JMenu();
+        javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Time Report - [Extractor-Mailer]");
@@ -168,18 +167,14 @@ public class MainFrame extends javax.swing.JFrame {
         parameterTable.setCellSelectionEnabled(true);
         parameterTable.setOpaque(false);
         parameterTable.getModel().addTableModelListener(
-            new TableModelListener()
-            {
-                public void tableChanged(TableModelEvent e)
-                {
+                e -> {
                     int row = e.getFirstRow();
                     int column = e.getColumn();
                     TableModel model = (TableModel)e.getSource();
                     String columnName = model.getColumnName(column);
                     Object data = model.getValueAt(row, column);
                     //System.out.println((String)data);
-                }
-            });
+                });
             parameterTable.getColumnModel().getColumn(0).setPreferredWidth(35);
             parameterTable.getColumnModel().getColumn(1).setPreferredWidth(120);
             //Hide the last column
@@ -191,18 +186,10 @@ public class MainFrame extends javax.swing.JFrame {
             jScrollPane1.setViewportView(parameterTable);
 
             extractReportsCheckBox.setText("Extract Reports");
-            extractReportsCheckBox.addItemListener(new java.awt.event.ItemListener() {
-                public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                    extractReportsCheckBoxItemStateChanged(evt);
-                }
-            });
+        extractReportsCheckBox.addItemListener(evt -> extractReportsCheckBoxItemStateChanged(evt));
 
             emailReportsCheckBox.setText("Email Reports");
-            emailReportsCheckBox.addItemListener(new java.awt.event.ItemListener() {
-                public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                    emailReportsCheckBoxItemStateChanged(evt);
-                }
-            });
+        emailReportsCheckBox.addItemListener(evt -> emailReportsCheckBoxItemStateChanged(evt));
 
             javax.swing.GroupLayout configurationPanelLayout = new javax.swing.GroupLayout(configurationPanel);
             configurationPanel.setLayout(configurationPanelLayout);
@@ -251,11 +238,7 @@ public class MainFrame extends javax.swing.JFrame {
             jTabbedPane1.addTab("Processing", processingPanel);
 
             processButton.setText("Process");
-            processButton.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    processButtonActionPerformed(evt);
-                }
-            });
+        processButton.addActionListener(evt -> processButtonActionPerformed(evt));
 
             fileMenu.setMnemonic('f');
             fileMenu.setText("File");
@@ -263,41 +246,25 @@ public class MainFrame extends javax.swing.JFrame {
             saveMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
             saveMenuItem.setMnemonic('s');
             saveMenuItem.setText("Save");
-            saveMenuItem.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    saveMenuItemActionPerformed(evt);
-                }
-            });
+        saveMenuItem.addActionListener(evt -> saveMenuItemActionPerformed(evt));
             fileMenu.add(saveMenuItem);
             fileMenu.add(jSeparator2);
 
             archiveMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
             archiveMenuItem.setText("Archive Files");
-            archiveMenuItem.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    archiveMenuItemActionPerformed(evt);
-                }
-            });
+        archiveMenuItem.addActionListener(evt -> archiveMenuItemActionPerformed(evt));
             fileMenu.add(archiveMenuItem);
 
             closePeriodMenutItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
             closePeriodMenutItem.setText("Close Reporting Period");
-            closePeriodMenutItem.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    closePeriodMenutItemActionPerformed(evt);
-                }
-            });
+        closePeriodMenutItem.addActionListener(evt -> closePeriodMenutItemActionPerformed(evt));
             fileMenu.add(closePeriodMenutItem);
             fileMenu.add(jSeparator1);
 
             exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.ALT_MASK));
             exitMenuItem.setMnemonic('x');
             exitMenuItem.setText("Exit");
-            exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    exitMenuItemActionPerformed(evt);
-                }
-            });
+        exitMenuItem.addActionListener(evt -> exitMenuItemActionPerformed(evt));
             fileMenu.add(exitMenuItem);
 
             menuBar.add(fileMenu);
@@ -367,7 +334,7 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosed
 
     private void extractReportsCheckBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_extractReportsCheckBoxItemStateChanged
-        if (extractReportsCheckBox.isSelected() == true || emailReportsCheckBox.isSelected() == true) {
+        if (extractReportsCheckBox.isSelected() || emailReportsCheckBox.isSelected()) {
             processButton.setEnabled(true);
         } else {
             processButton.setEnabled(false);
@@ -375,7 +342,7 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_extractReportsCheckBoxItemStateChanged
 
     private void emailReportsCheckBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_emailReportsCheckBoxItemStateChanged
-        if (emailReportsCheckBox.isSelected() == true || extractReportsCheckBox.isSelected() == true) {
+        if (emailReportsCheckBox.isSelected() || extractReportsCheckBox.isSelected()) {
             processButton.setEnabled(true);
         } else {
             processButton.setEnabled(false);
@@ -392,7 +359,7 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_archiveMenuItemActionPerformed
 
     private void closePeriodMenutItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closePeriodMenutItemActionPerformed
-        String message = "You will not be able to do any processing for this Reporting period once it is closed.\n"
+        String message = "No further processing can be done once a Reporting period is closed.\n"
                 + "Are you sure you want to continue?";
         if (JOptionPane.showConfirmDialog(this, message, "Confirm", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             closeReportPeriod();
@@ -406,28 +373,6 @@ public class MainFrame extends javax.swing.JFrame {
             processButton.setEnabled(extractReportsCheckBox.isSelected() || emailReportsCheckBox.isSelected());
         }
     }//GEN-LAST:event_closePeriodMenutItemActionPerformed
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem aboutMenuItem;
-    private javax.swing.JMenuItem archiveMenuItem;
-    private javax.swing.JMenuItem closePeriodMenutItem;
-    private javax.swing.JTextArea commandTextArea;
-    private javax.swing.JPanel configurationPanel;
-    private javax.swing.JCheckBox emailReportsCheckBox;
-    private javax.swing.JMenuItem exitMenuItem;
-    private javax.swing.JCheckBox extractReportsCheckBox;
-    private javax.swing.JMenu fileMenu;
-    private javax.swing.JMenu helpMenu;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JPopupMenu.Separator jSeparator1;
-    private javax.swing.JPopupMenu.Separator jSeparator2;
-    private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JMenuBar menuBar;
-    private javax.swing.JTable parameterTable;
-    private javax.swing.JButton processButton;
-    private javax.swing.JPanel processingPanel;
-    private javax.swing.JMenuItem saveMenuItem;
     // End of variables declaration//GEN-END:variables
 
     private void buildParameterTable(javax.swing.JTable table, PropertiesFile pf) {
@@ -506,7 +451,7 @@ public class MainFrame extends javax.swing.JFrame {
                 super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
 
                 //Run this if app is under normal mode. Else it is admin
-                if (opMode == false) {
+                if (!opMode) {
                     setBackground(java.awt.Color.LIGHT_GRAY);
                     setForeground(java.awt.Color.BLACK);
 
@@ -577,19 +522,19 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void runScript() {
         //Stupid logic just to get around thread sync problem of displaying to JtextArea
-        if (extractReportsCheckBox.isSelected() == true && emailReportsCheckBox.isSelected() == false) {
+        if (extractReportsCheckBox.isSelected() && !emailReportsCheckBox.isSelected()) {
             ExtractProcess ex = new ExtractProcess(processButton);
             Thread t = new Thread(ex, "Thread-Extract");
             t.start();
         }
 
-        if (emailReportsCheckBox.isSelected() == true && extractReportsCheckBox.isSelected() == false) {
+        if (emailReportsCheckBox.isSelected() && !extractReportsCheckBox.isSelected()) {
             EmailProcess ep = new EmailProcess(processButton);
             Thread t = new Thread(ep, "Thread-Email");
             t.start();
         }
 
-        if (emailReportsCheckBox.isSelected() == true && extractReportsCheckBox.isSelected() == true) {
+        if (emailReportsCheckBox.isSelected() && extractReportsCheckBox.isSelected()) {
             WholeProcess wp = new WholeProcess(processButton);
             Thread t = new Thread(wp, "Thread-WholeProcess");
             t.start();
@@ -627,5 +572,5 @@ public class MainFrame extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "Reporting Period successfully closed.\n", "Report Period", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    private static final Logger LOG = Logger.getLogger(MainFrame.class.getName());
+    // --Commented out by Inspection (5/2/2016 8:53 PM):private static final Logger LOG = Logger.getLogger(MainFrame.class.getName());
 }
