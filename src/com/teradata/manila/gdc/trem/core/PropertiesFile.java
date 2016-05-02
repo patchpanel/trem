@@ -5,13 +5,7 @@
  */
 package com.teradata.manila.gdc.trem.core;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -22,7 +16,7 @@ import java.util.logging.Logger;
  * @author jl186034
  */
 public class PropertiesFile {
-    private static final Logger LOG = Logger.getLogger(PropertiesFile.class.getName());
+    // --Commented out by Inspection (5/2/2016 8:34 PM):private static final Logger LOG = Logger.getLogger(PropertiesFile.class.getName());
 
     private String _rootDir;
     private String _inputDir;
@@ -511,7 +505,7 @@ public class PropertiesFile {
     /**
      *
      */
-    public void ReadPropertiesFile() {
+    private void ReadPropertiesFile() {
         Properties props = new Properties();
 
         InputStream is = null;

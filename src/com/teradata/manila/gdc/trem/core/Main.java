@@ -2,10 +2,11 @@ package com.teradata.manila.gdc.trem.core;
 
 import com.teradata.manila.gdc.trem.gui.Logon;
 import de.javasoft.plaf.synthetica.SyntheticaPlainLookAndFeel;
+
+import javax.swing.*;
 import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
@@ -13,7 +14,7 @@ import javax.swing.UnsupportedLookAndFeelException;
  */
 public class Main {
 
-    private static final Logger LOG = Logger.getLogger(Main.class.getName());
+    // --Commented out by Inspection (5/2/2016 8:34 PM):private static final Logger LOG = Logger.getLogger(Main.class.getName());
 
     /**
      *

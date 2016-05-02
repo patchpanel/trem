@@ -5,14 +5,12 @@
  */
 package com.teradata.manila.gdc.trem.core;
 
-import java.util.logging.Logger;
-
 /**
  *
  * @author jl186034
  */
 public class ArchiveProcess extends Thread {
-    private static final Logger LOG = Logger.getLogger(ArchiveProcess.class.getName());
+    // --Commented out by Inspection (5/2/2016 8:33 PM):private static final Logger LOG = Logger.getLogger(ArchiveProcess.class.getName());
 
     private int rc;
 
@@ -23,14 +21,16 @@ public class ArchiveProcess extends Thread {
         rc = -1;
     }
 
-    /**
-     *
-     * @return
-     */
-    public int getRc() {
-        return rc;
-    }
-    
+// --Commented out by Inspection START (5/2/2016 8:33 PM):
+//    /**
+//     *
+//     * @return
+//     */
+//    public int getRc() {
+//        return rc;
+//    }
+// --Commented out by Inspection STOP (5/2/2016 8:33 PM)
+
     @Override
     public void run() {
 

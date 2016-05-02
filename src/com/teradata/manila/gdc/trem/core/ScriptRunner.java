@@ -4,20 +4,15 @@ package com.teradata.manila.gdc.trem.core;
  *
  * @author jl186034
  */
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.util.logging.Logger;
-import javax.swing.JTextArea;
+
+import java.io.*;
 
 /**
  *
  * @author jl186034
  */
 public class ScriptRunner {
-    private static final Logger LOG = Logger.getLogger(ScriptRunner.class.getName());
+    // --Commented out by Inspection (5/2/2016 8:34 PM):private static final Logger LOG = Logger.getLogger(ScriptRunner.class.getName());
 
     private String _args;
     private javax.swing.JTextArea _textArea;
@@ -46,89 +41,111 @@ public class ScriptRunner {
         return _rc;
     }
 
-    private void setRc(int _rc) {
-        this._rc = _rc;
-    }
+// --Commented out by Inspection START (5/2/2016 8:34 PM):
+//    private void setRc(int _rc) {
+//        this._rc = _rc;
+//    }
+// --Commented out by Inspection STOP (5/2/2016 8:34 PM)
 
-    /**
-     *
-     * @return
-     */
-    public PropertiesFile getAlProperties() {
-        return _propertiesFile;
-    }
+// --Commented out by Inspection START (5/2/2016 8:34 PM):
+//    /**
+//     *
+//     * @return
+//     */
+//    public PropertiesFile getAlProperties() {
+//        return _propertiesFile;
+//    }
+// --Commented out by Inspection STOP (5/2/2016 8:34 PM)
 
-    /**
-     *
-     * @param _alProperties
-     */
-    public void setAlProperties(PropertiesFile _alProperties) {
-        this._propertiesFile = _alProperties;
-    }
+// --Commented out by Inspection START (5/2/2016 8:34 PM):
+//    /**
+//     *
+//     * @param _alProperties
+//     */
+//    public void setAlProperties(PropertiesFile _alProperties) {
+//        this._propertiesFile = _alProperties;
+//    }
+// --Commented out by Inspection STOP (5/2/2016 8:34 PM)
 
-    /**
-     *
-     * @return
-     */
-    public int getOption() {
-        return _option;
-    }
+// --Commented out by Inspection START (5/2/2016 8:34 PM):
+//    /**
+//     *
+//     * @return
+//     */
+//    public int getOption() {
+//        return _option;
+//    }
+// --Commented out by Inspection STOP (5/2/2016 8:34 PM)
 
-    /**
-     *
-     * @param _option
-     */
-    public void setOption(int _option) {
-        this._option = _option;
-    }
+// --Commented out by Inspection START (5/2/2016 8:34 PM):
+//    /**
+//     *
+//     * @param _option
+//     */
+//    public void setOption(int _option) {
+//        this._option = _option;
+//    }
+// --Commented out by Inspection STOP (5/2/2016 8:34 PM)
 
-    /**
-     *
-     * @return
-     */
-    public String getArgs() {
-        return _args;
-    }
+// --Commented out by Inspection START (5/2/2016 8:34 PM):
+//    /**
+//     *
+//     * @return
+//     */
+//    public String getArgs() {
+//        return _args;
+//    }
+// --Commented out by Inspection STOP (5/2/2016 8:34 PM)
 
-    /**
-     *
-     * @param _args
-     */
-    public void setArgs(String _args) {
-        this._args = _args;
-    }
+// --Commented out by Inspection START (5/2/2016 8:34 PM):
+//    /**
+//     *
+//     * @param _args
+//     */
+//    public void setArgs(String _args) {
+//        this._args = _args;
+//    }
+// --Commented out by Inspection STOP (5/2/2016 8:34 PM)
 
-    /**
-     *
-     * @return
-     */
-    public JTextArea getTextArea() {
-        return _textArea;
-    }
+// --Commented out by Inspection START (5/2/2016 8:34 PM):
+//    /**
+//     *
+//     * @return
+//     */
+//    public JTextArea getTextArea() {
+//        return _textArea;
+//    }
+// --Commented out by Inspection STOP (5/2/2016 8:34 PM)
 
-    /**
-     *
-     * @param _textArea
-     */
-    public void setTextArea(JTextArea _textArea) {
-        this._textArea = _textArea;
-    }
+// --Commented out by Inspection START (5/2/2016 8:34 PM):
+//    /**
+//     *
+//     * @param _textArea
+//     */
+//    public void setTextArea(JTextArea _textArea) {
+//        this._textArea = _textArea;
+//    }
+// --Commented out by Inspection STOP (5/2/2016 8:34 PM)
 
-    /**
-     *
-     * @return
-     */
-    public String getCommand() {
-        return _command;
-    }
+// --Commented out by Inspection START (5/2/2016 8:34 PM):
+//    /**
+//     *
+//     * @return
+//     */
+//    public String getCommand() {
+//        return _command;
+//    }
+// --Commented out by Inspection STOP (5/2/2016 8:34 PM)
 
-    /**
-     *
-     * @param _command
-     */
-    public void setCommand(String _command) {
-        this._command = _command;
-    }
+// --Commented out by Inspection START (5/2/2016 8:34 PM):
+//    /**
+//     *
+//     * @param _command
+//     */
+//    public void setCommand(String _command) {
+//        this._command = _command;
+//    }
+// --Commented out by Inspection STOP (5/2/2016 8:34 PM)
 
     /**
      *
@@ -142,9 +159,9 @@ public class ScriptRunner {
         try {
             String line;
 
-            OutputStream stdin = null;
-            InputStream stderr = null;
-            InputStream stdout = null;
+            OutputStream stdin;
+            InputStream stderr;
+            InputStream stdout;
 
             //Create the argument string
             this._args = this.buildCommand();
@@ -184,7 +201,7 @@ public class ScriptRunner {
      *
      * @return
      */
-    public String buildCommand() {
+    private String buildCommand() {
         String cmd = null;
 
         String rootDir = _propertiesFile.getRootDir();

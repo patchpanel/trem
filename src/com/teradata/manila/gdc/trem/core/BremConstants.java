@@ -5,13 +5,11 @@
  */
 package com.teradata.manila.gdc.trem.core;
 
-import java.util.logging.Logger;
-
 /**
  *
  * @author jl186034
  */
-public class BremConstants {
+class BremConstants {
 
     /**
      *
@@ -33,10 +31,12 @@ public class BremConstants {
      */
     public static final int EMAIL_SINGLE = 4;
 
-    /**
-     *
-     */
-    public static final int EMAIL_GROUP = 5;
+// --Commented out by Inspection START (5/2/2016 8:34 PM):
+//    /**
+//     *
+//     */
+//    public static final int EMAIL_GROUP = 5;
+// --Commented out by Inspection STOP (5/2/2016 8:34 PM)
 
     /**
      *
@@ -57,8 +57,11 @@ public class BremConstants {
      *
      */
     public static final int ARCHIVE_LOG = 9;
-    //public static final boolean PROCESS_ALL = true;
-    private static final Logger LOG = Logger.getLogger(BremConstants.class.getName());
+
+    // --Commented out by Inspection START (5/2/2016 8:34 PM):
+//    //public static final boolean PROCESS_ALL = true;
+//    private static final Logger LOG = Logger.getLogger(BremConstants.class.getName());
+// --Commented out by Inspection STOP (5/2/2016 8:34 PM)
     private BremConstants() {
     }
 }

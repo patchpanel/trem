@@ -1,14 +1,12 @@
 package com.teradata.manila.gdc.trem.core;
 
-import java.util.logging.Logger;
-
 /**
  *
  * @author jl186034
  */
 public class ExtractProcess extends Thread {
 
-    private static final Logger LOG = Logger.getLogger(ExtractProcess.class.getName());
+    // --Commented out by Inspection (5/2/2016 8:34 PM):private static final Logger LOG = Logger.getLogger(ExtractProcess.class.getName());
 
     private final javax.swing.JButton button;
 
