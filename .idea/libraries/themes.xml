@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="themes">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/themes/synthetica.jar!/" />
+      <root url="jar://$PROJECT_DIR$/themes/syntheticaPlain.jar!/" />
+      <root url="jar://$PROJECT_DIR$/themes/syntheticaBlueIce.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
