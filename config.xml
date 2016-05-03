@@ -14,7 +14,7 @@
 <entry key="smtpserver">localhost</entry>
 <entry key="txtresourcelist">ResourceList.txt</entry>
 <entry key="tempdir">c:\trem\temp</entry>
-<entry key="excelresourcelist">GDC Manila Resource List template v1 0.xlsx</entry>
+    <entry key="excelresourcelist">GDC Manila Resource List.xlsx</entry>
 <entry key="emailfrom">jl186034@teradata.com</entry>
 <entry key="extractresourcelistscript">ExtractResourceList.vbs</entry>
 <entry key="extractmanagerscript">ExtractGroupReports.vbs</entry>

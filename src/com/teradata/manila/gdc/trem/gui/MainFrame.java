@@ -13,7 +13,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 /**
- *
  * @author jl186034
  */
 class MainFrame extends javax.swing.JFrame {
@@ -37,7 +36,6 @@ class MainFrame extends javax.swing.JFrame {
     }
 
     /**
-     *
      * @param message
      * @param mode
      */
@@ -123,6 +121,7 @@ class MainFrame extends javax.swing.JFrame {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
             }
+
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
             }
@@ -130,39 +129,39 @@ class MainFrame extends javax.swing.JFrame {
 
         parameterTable.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
         parameterTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
-            },
-            new String [] {
-                "Parameter", "Value"
-            }
+                new Object[][]{
+                        {null, null},
+                        {null, null},
+                        {null, null},
+                        {null, null},
+                        {null, null},
+                        {null, null},
+                        {null, null},
+                        {null, null},
+                        {null, null},
+                        {null, null},
+                        {null, null},
+                        {null, null},
+                        {null, null},
+                        {null, null},
+                        {null, null},
+                        {null, null},
+                        {null, null},
+                        {null, null},
+                        {null, null},
+                        {null, null},
+                        {null, null},
+                        {null, null},
+                        {null, null},
+                        {null, null},
+                        {null, null},
+                        {null, null},
+                        {null, null},
+                        {null, null}
+                },
+                new String[]{
+                        "Parameter", "Value"
+                }
         ));
         parameterTable.setCellSelectionEnabled(true);
         parameterTable.setOpaque(false);
@@ -170,138 +169,155 @@ class MainFrame extends javax.swing.JFrame {
                 e -> {
                     int row = e.getFirstRow();
                     int column = e.getColumn();
-                    TableModel model = (TableModel)e.getSource();
+                    TableModel model = (TableModel) e.getSource();
                     String columnName = model.getColumnName(column);
                     Object data = model.getValueAt(row, column);
                     //System.out.println((String)data);
                 });
-            parameterTable.getColumnModel().getColumn(0).setPreferredWidth(35);
-            parameterTable.getColumnModel().getColumn(1).setPreferredWidth(120);
-            //Hide the last column
-            //parameterTable.getColumnModel().getColumn(2).setWidth(0);
-            //parameterTable.getColumnModel().getColumn(2).setMinWidth(0);
-            //parameterTable.getColumnModel().getColumn(2).setMaxWidth(0);
-            //parameterTable.getColumnModel().getColumn(2).setPreferredWidth(200);
-            parameterTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
-            jScrollPane1.setViewportView(parameterTable);
+        parameterTable.getColumnModel().getColumn(0).setPreferredWidth(35);
+        parameterTable.getColumnModel().getColumn(1).setPreferredWidth(120);
+        //Hide the last column
+        //parameterTable.getColumnModel().getColumn(2).setWidth(0);
+        //parameterTable.getColumnModel().getColumn(2).setMinWidth(0);
+        //parameterTable.getColumnModel().getColumn(2).setMaxWidth(0);
+        //parameterTable.getColumnModel().getColumn(2).setPreferredWidth(200);
+        parameterTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
+        jScrollPane1.setViewportView(parameterTable);
 
-            extractReportsCheckBox.setText("Extract Reports");
+        extractReportsCheckBox.setText("Extract Reports");
         extractReportsCheckBox.addItemListener(evt -> extractReportsCheckBoxItemStateChanged(evt));
 
-            emailReportsCheckBox.setText("Email Reports");
+        emailReportsCheckBox.setText("Email Reports");
         emailReportsCheckBox.addItemListener(evt -> emailReportsCheckBoxItemStateChanged(evt));
 
-            javax.swing.GroupLayout configurationPanelLayout = new javax.swing.GroupLayout(configurationPanel);
-            configurationPanel.setLayout(configurationPanelLayout);
-            configurationPanelLayout.setHorizontalGroup(
+        javax.swing.GroupLayout configurationPanelLayout = new javax.swing.GroupLayout(configurationPanel);
+        configurationPanel.setLayout(configurationPanelLayout);
+        configurationPanelLayout.setHorizontalGroup(
                 configurationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 534, Short.MAX_VALUE)
-                .addGroup(configurationPanelLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(extractReportsCheckBox)
-                    .addGap(40, 40, 40)
-                    .addComponent(emailReportsCheckBox)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            );
-            configurationPanelLayout.setVerticalGroup(
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 534, Short.MAX_VALUE)
+                        .addGroup(configurationPanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(extractReportsCheckBox)
+                                .addGap(40, 40, 40)
+                                .addComponent(emailReportsCheckBox)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        configurationPanelLayout.setVerticalGroup(
                 configurationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(configurationPanelLayout.createSequentialGroup()
-                    .addGap(0, 0, 0)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addGroup(configurationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(extractReportsCheckBox)
-                        .addComponent(emailReportsCheckBox))
-                    .addContainerGap())
-            );
+                        .addGroup(configurationPanelLayout.createSequentialGroup()
+                                .addGap(0, 0, 0)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(configurationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(extractReportsCheckBox)
+                                        .addComponent(emailReportsCheckBox))
+                                .addContainerGap())
+        );
 
-            jTabbedPane1.addTab("Configuration", configurationPanel);
+        jTabbedPane1.addTab("Configuration", configurationPanel);
 
-            commandTextArea.setBackground(new java.awt.Color(0, 0, 0));
-            commandTextArea.setColumns(20);
-            commandTextArea.setFont(new java.awt.Font("Lucida Console", 0, 12)); // NOI18N
-            commandTextArea.setForeground(new java.awt.Color(153, 255, 0));
-            commandTextArea.setRows(5);
-            jScrollPane2.setViewportView(commandTextArea);
+        commandTextArea.setBackground(new java.awt.Color(0, 0, 0));
+        commandTextArea.setColumns(20);
+        commandTextArea.setFont(new java.awt.Font("Lucida Console", 0, 12)); // NOI18N
+        commandTextArea.setForeground(new java.awt.Color(153, 255, 0));
+        commandTextArea.setRows(5);
+        jScrollPane2.setViewportView(commandTextArea);
 
-            javax.swing.GroupLayout processingPanelLayout = new javax.swing.GroupLayout(processingPanel);
-            processingPanel.setLayout(processingPanelLayout);
-            processingPanelLayout.setHorizontalGroup(
+        javax.swing.GroupLayout processingPanelLayout = new javax.swing.GroupLayout(processingPanel);
+        processingPanel.setLayout(processingPanelLayout);
+        processingPanelLayout.setHorizontalGroup(
                 processingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 534, Short.MAX_VALUE)
-            );
-            processingPanelLayout.setVerticalGroup(
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 534, Short.MAX_VALUE)
+        );
+        processingPanelLayout.setVerticalGroup(
                 processingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
-            );
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+        );
 
-            jTabbedPane1.addTab("Processing", processingPanel);
+        jTabbedPane1.addTab("Processing", processingPanel);
 
-            processButton.setText("Process");
+        processButton.setText("Process");
         processButton.addActionListener(evt -> processButtonActionPerformed(evt));
 
-            fileMenu.setMnemonic('f');
-            fileMenu.setText("File");
+        fileMenu.setMnemonic('f');
+        fileMenu.setText("File");
 
-            saveMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
-            saveMenuItem.setMnemonic('s');
-            saveMenuItem.setText("Save");
+        saveMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        saveMenuItem.setMnemonic('s');
+        saveMenuItem.setText("Save");
         saveMenuItem.addActionListener(evt -> saveMenuItemActionPerformed(evt));
-            fileMenu.add(saveMenuItem);
-            fileMenu.add(jSeparator2);
+        fileMenu.add(saveMenuItem);
+        fileMenu.add(jSeparator2);
 
-            archiveMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-            archiveMenuItem.setText("Archive Files");
+        archiveMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        archiveMenuItem.setText("Archive Files");
         archiveMenuItem.addActionListener(evt -> archiveMenuItemActionPerformed(evt));
-            fileMenu.add(archiveMenuItem);
+        fileMenu.add(archiveMenuItem);
 
-            closePeriodMenutItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-            closePeriodMenutItem.setText("Close Reporting Period");
+        closePeriodMenutItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        closePeriodMenutItem.setText("Close Reporting Period");
         closePeriodMenutItem.addActionListener(evt -> closePeriodMenutItemActionPerformed(evt));
-            fileMenu.add(closePeriodMenutItem);
-            fileMenu.add(jSeparator1);
+        fileMenu.add(closePeriodMenutItem);
+        fileMenu.add(jSeparator1);
 
-            exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.ALT_MASK));
-            exitMenuItem.setMnemonic('x');
-            exitMenuItem.setText("Exit");
+        exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.ALT_MASK));
+        exitMenuItem.setMnemonic('x');
+        exitMenuItem.setText("Exit");
         exitMenuItem.addActionListener(evt -> exitMenuItemActionPerformed(evt));
-            fileMenu.add(exitMenuItem);
+        fileMenu.add(exitMenuItem);
 
-            menuBar.add(fileMenu);
+        menuBar.add(fileMenu);
 
-            helpMenu.setMnemonic('h');
-            helpMenu.setText("Help");
+        helpMenu.setMnemonic('h');
+        helpMenu.setText("Help");
 
-            aboutMenuItem.setMnemonic('a');
-            aboutMenuItem.setText("About");
-            helpMenu.add(aboutMenuItem);
+        aboutMenuItem.setMnemonic('a');
+        aboutMenuItem.setText("About");
+        aboutMenuItem.addActionListener(evt -> aboutMenuItemActionPerformed(evt));
+        helpMenu.add(aboutMenuItem);
 
-            menuBar.add(helpMenu);
+        menuBar.add(helpMenu);
 
-            setJMenuBar(menuBar);
+        setJMenuBar(menuBar);
 
-            javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-            getContentPane().setLayout(layout);
-            layout.setHorizontalGroup(
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(processButton)
-                    .addContainerGap())
-                .addComponent(jTabbedPane1)
-            );
-            layout.setVerticalGroup(
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(processButton)
+                                .addContainerGap())
+                        .addComponent(jTabbedPane1)
+        );
+        layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addComponent(jTabbedPane1)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(processButton)
-                    .addContainerGap())
-            );
+                        .addGroup(layout.createSequentialGroup()
+                                .addComponent(jTabbedPane1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(processButton)
+                                .addContainerGap())
+        );
 
-            pack();
-            setLocationRelativeTo(null);
-        }// </editor-fold>//GEN-END:initComponents
+        pack();
+        setLocationRelativeTo(null);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_archiveMenuItemActionPerformed
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                About dialog = new About(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setLocationRelativeTo(null);
+                dialog.setVisible(true);
+            }
+        });
+    }
 
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
         cleanUp();
@@ -446,7 +462,7 @@ class MainFrame extends javax.swing.JFrame {
         table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
             public java.awt.Component getTableCellRendererComponent(javax.swing.JTable table,
-                    Object value, boolean isSelected, boolean hasFocus, int row, int col) {
+                                                                    Object value, boolean isSelected, boolean hasFocus, int row, int col) {
 
                 super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
 
