@@ -336,9 +336,14 @@ class MainFrame extends javax.swing.JFrame {
         periodClose = Utilities.checkPeriodClose();
         closePeriodMenutItem.setEnabled(!periodClose);
         extractReportsCheckBox.setEnabled(!periodClose);
+        extractReportsCheckBox.setSelected(!periodClose);
         emailReportsCheckBox.setEnabled(!periodClose);
-        processButton.setEnabled(extractReportsCheckBox.isSelected() || emailReportsCheckBox.isSelected());
+        emailReportsCheckBox.setSelected(!periodClose);
+        processButton.setEnabled(extractReportsCheckBox.isSelected() && emailReportsCheckBox.isSelected());
         JOptionPane.showMessageDialog(this, "Property saved", "Save", JOptionPane.INFORMATION_MESSAGE);
+        if (periodClose) {
+            JOptionPane.showMessageDialog(this, "Reporting period has already been closed.", "Reporting Period", JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_saveMenuItemActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
