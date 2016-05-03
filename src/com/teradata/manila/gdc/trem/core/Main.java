@@ -4,6 +4,7 @@ import com.teradata.manila.gdc.trem.gui.Logon;
 import de.javasoft.plaf.synthetica.SyntheticaPlainLookAndFeel;
 
 import javax.swing.*;
+import java.awt.*;
 import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -52,6 +53,7 @@ public class Main {
                     System.exit(0);
                 }
             });
+            dialog.setSize(new Dimension(293,179));
             dialog.setLocationRelativeTo(null);
             dialog.setVisible(true);
         });
