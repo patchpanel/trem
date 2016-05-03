@@ -19,7 +19,8 @@ Function Zip-File {
 )
 	& "C:\Program Files\7-Zip\7z.exe" u -mx9 -t7z -m0=lzma2 ("$(split-path $inputFile)\$outputFile") $argsExceBadgeReport
 	if ($LASTEXITCODE -eq 0) {
-		Remove-Item $argsExceBadgeReport -Force -Recurse -ErrorAction SilentlyContinue
+		#Remove-Item $argsExceBadgeReport -Force -Recurse -ErrorAction SilentlyContinue
+		Write-Host -ForegroundColor DarkMagenta "[$(Get-Date)] Successful Zip"
 	} else {
 		Exit 99
 	}
@@ -43,7 +44,7 @@ $elapsed = [System.Diagnostics.Stopwatch]::StartNew()
 $started = Get-Date
 
 Write-Host -ForegroundColor Green "=================================================================="
-Write-Host -ForegroundColor DarkMagenta "Sending complete Badge report"
+Write-Host -ForegroundColor DarkMagenta "[$(Get-Date)] Sending complete Badge report"
 Write-Host -ForegroundColor Green "=================================================================="
 
 try
@@ -106,7 +107,7 @@ $emailBody = "Hi,`r`n`r`nAttached is the Badge Report for the aforementioned mon
 	$emailAttachments = $fileName
 	$flgEAexists = Test-Path $emailAttachments
 	if ($flgEAexists -eq 1) {
-		$logFile = "$argsBatchID.EmailIndividual.log" 
+		$logFile = "$argsBatchID.smtp.Individual.log" 
 		try
 		{
 			$message = "[$(Get-Date)] Sending to $emailAddress"                
