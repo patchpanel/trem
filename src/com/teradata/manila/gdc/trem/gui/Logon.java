@@ -54,7 +54,7 @@ public class Logon extends javax.swing.JDialog {
         passwordField = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Time Report [Extractor-Mailer] - Logon");
+        setTitle("Time Report [Extractor-Mailer]-Logon");
         setAlwaysOnTop(true);
         setIconImage(null);
         setResizable(false);
