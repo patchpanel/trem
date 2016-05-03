@@ -1,9 +1,4 @@
-'ADD Delete of source files
-'BATCH ID for all ISO Dates. Replace all ISO date with user configurable YYYYMM
-'TAG for Managers Report
-'Managers Text file output naming
-'Add Argument handling and validation specially for batchid
-'mailer for all, practice and single
+'"cscript.exe" "c:\trem\bin/ExtractIndividualReports.vbs" "c:\trem\in/ResourceList.txt" "c:\trem\in/201603 - BDG_TimeReport_V2.xlsx" "Summary" "Detailed Entry Exit Pair" "Detailed Raw" "C:\trem\out" "201604"
 Option Explicit
 
 Const C_FILENAME = 1
@@ -35,9 +30,6 @@ Dim dtmStartTime: dtmStartTime = Timer
 'args(5) - Report output Directory
 'args(6) - Batch ID
 
-'cscript ExtractIndividualReports.vbs "C:\atri\in\GDC Manila Resource List template v1 0.txt" "C:\atri\in\201603 - BDG_TimeReport_V2.xlsx" "Summary" "Detailed Entry Exit Pair" "Detailed Raw" "C:\atri\out" 201604
-
-'Dim dtProcessed: dtProcessed = Left(IsoDate(Now),8)
 Dim a_resourceList, a_badgeReport, a_srcSheet1, a_srcSheet2, a_srcSheet3, a_outputDir, a_batchid
 
 Wscript.echo "[" & Now & "]" & ": " & "==============================================================="

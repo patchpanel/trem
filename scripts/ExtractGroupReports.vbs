@@ -1,9 +1,4 @@
-'ADD Delete of source files
-'BATCH ID for all ISO Dates. Replace all ISO date with user configurable YYYYMM
-'TAG for Managers Report
-'Managers Text file output naming
-'Add Argument handling and validation specially for batchid
-'mailer for all, practice and single
+'"cscript.exe" "c:\trem\bin/ExtractGroupReports.vbs" "c:\trem\in/ResourceList.txt" "c:\trem\in/ManagersList.txt" "c:\trem\in/201603 - BDG_TimeReport_V2.xlsx" "Summary" "Detailed Entry 
 Option Explicit
 
 Const C_FILENAME = 1
@@ -22,8 +17,6 @@ Const xlAscending = 1
 Const xlDescending = 2
 Const xlYes = 1
 Const xlCellTypeVisible = 12
-
-'cscript ExtractGroupReports.vbs "C:\atri\in\GDC Manila Resource List template v1 0.txt" "C:\atri\in\201603 - BDG_TimeReport_V2.xlsx" "Summary" "Detailed Entry Exit Pair" "Detailed Raw" "C:\atri\out" 201604 Practice
 
 'args(0) - Extracted Resource List in text format
 'args(1) - Manager List in text format
