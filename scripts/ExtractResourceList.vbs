@@ -1,9 +1,4 @@
-'ADD Delete of source files
-'BATCH ID for all ISO Dates. Replace all ISO date with user configurable YYYYMM
-'TAG for Managers Report
-'Managers Text file output naming
-'Add Argument handling and validation specially for batchid
-'mailer for all, practice and single
+'"cscript.exe" "c:\trem\bin/ExtractResourceList.vbs" "c:\trem\in/GDC Manila Resource List template v1 0.xlsx" "c:\trem\in/ResourceList.txt" "c:\trem\in/ManagersList.txt" "201604"
 Option Explicit
 
 Const C_FILENAME = 1

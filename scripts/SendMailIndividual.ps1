@@ -1,7 +1,4 @@
-﻿#
-# Script.ps1
-#
-#powershell -ExecutionPolicy ByPass -File .\SendMailIndividual.ps1 "C:\atri\in" jl186034@teradata.com jl186034@teradata.com localhost 201604 "THIS A TEST"
+﻿#powershell.exe -executionpolicy bypass -file  c:\trem\bin/SendMailIndividual.ps1 "c:\trem\in/201603 - BDG_TimeReport_V2.xlsx" "jl186034@teradata.com" "jl186034@teradata.com" "localhost" "201604" "in-script" "c:\trem\log" "Practice"
 #Badge Reports Manila QLID: bm230103
 param (
     [string]$argsExceBadgeReport = $(throw "-Excel Badge Report file is required."),
@@ -13,6 +10,20 @@ param (
 	[string]$argsLogDir = $(throw "-Log Directory is required."),
 	[string]$argsMngrRptTag = $(throw "-Manager tag is required.")
 )
+
+
+Function Zip-File {
+	param(
+	[String]$inputFile,
+	[String]$outputFile
+)
+	& "C:\Program Files\7-Zip\7z.exe" u -mx9 -t7z -m0=lzma2 ("$(split-path $inputFile)\$outputFile") $argsExceBadgeReport
+	if ($LASTEXITCODE -eq 0) {
+		Remove-Item $argsExceBadgeReport -Force -Recurse -ErrorAction SilentlyContinue
+	} else {
+		Exit 99
+	}
+}
 
 Set-Variable -Name emailBody -Visibility Private
 Set-Variable -Name fileName -Visibility Private
@@ -72,7 +83,10 @@ if ($flgBadgeReptExists -eq 0)
     Exit 99
 }
 
-$ScriptDir = Split-Path $script:MyInvocation.MyCommand.Path
+#20160520: Compress file. 
+#It might be easier to send it via SMTP
+$zipFile = ([io.fileinfo]"$argsExceBadgeReport").basename
+Zip-File $argsExceBadgeReport $zipFile
 
 #+-------------------------------------------------------+'
 #|                 SEND INDIVIDUAL REPORT                 |'
@@ -84,7 +98,9 @@ $logFile = "smtp.Single.$argsBatchID.log"
 #$emailBody = $argsEmailBody
 #Hardcode values for the mean-time
 $emailBody = "Hi,`r`n`r`nAttached is the Badge Report for the aforementioned month.`r`n`r`nManila Badge Report`r`n`r`n`r`n`r`n***System generated email. Please do not reply.***"
-	$fileName = $argsExceBadgeReport
+	#$fileName = $argsExceBadgeReport
+	$fileName = "$(split-path $argsExceBadgeReport)\$zipFile.7z"
+	Write-Host $fileName
 	$emailAddress = $argsToEmailAddress
 	$emailSubject = "Badge Report for $ProcessedDate"
 	$emailAttachments = $fileName

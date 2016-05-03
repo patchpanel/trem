@@ -1,7 +1,4 @@
-﻿#
-# Script.ps1
-#
-#powershell -ExecutionPolicy ByPass -File .\mailer.ps1 "C:\atri\in\GDC Manila Resource List template v1 0.txt" "C:\atri\in\GDC Manila Resource List template v1 0.Managers.txt" "C:\atri\out" jl186034@teradata.com localhost 201604 "Practice" "THIS A TEST" "C:\atri\log"
+﻿#powershell.exe -executionpolicy bypass -file  c:\trem\bin/SendMailAll.ps1 "c:\trem\in/ResourceList.txt" "c:\trem\in/ManagersList.txt" "C:\trem\out" "jl186034@teradata.com" "localhost" "201604" "Practice" "in-script" "c:\trem\log"
 #Badge Reports Manila QLID: bm230103
 param (
     [string]$argsResourceList = $(throw "-Resource List is required."),
