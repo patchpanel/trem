@@ -14,11 +14,10 @@ import java.io.*;
 public class ScriptRunner {
     // --Commented out by Inspection (5/2/2016 8:34 PM):private static final Logger LOG = Logger.getLogger(ScriptRunner.class.getName());
 
-    private String _args;
+    private final PropertiesFile _propertiesFile;
+    private final String _command;
+    private final int _option;
     private javax.swing.JTextArea _textArea;
-    private PropertiesFile _propertiesFile;
-    private String _command;
-    private int _option;
     private int _rc;
 
     /**
@@ -164,9 +163,9 @@ public class ScriptRunner {
             InputStream stdout;
 
             //Create the argument string
-            this._args = this.buildCommand();
-            System.out.println("Executing: " + this._args);
-            Process process = Runtime.getRuntime().exec(this._args);
+            String _args = this.buildCommand();
+            System.out.println("Executing: " + _args);
+            Process process = Runtime.getRuntime().exec(_args);
             stdin = process.getOutputStream();
             stderr = process.getErrorStream();
             stdout = process.getInputStream();
@@ -235,7 +234,7 @@ public class ScriptRunner {
 
         switch (this._option) {
             case BremConstants.EXTRACT_RESOURCE_LIST:
-                //cmd = new String[]{"\"" + _command.toLowerCase() + "\"," + " \"" + _propertiesFile.get(15) + "\" \"" + _propertiesFile.get(7) + "\""};
+                //"cscript.exe" "c:\trem\bin/ExtractResourceList.vbs" "c:\trem\in/GDC Manila Resource List template v1 0.xlsx" "c:\trem\in/ResourceList.txt" "c:\trem\in/ManagersList.txt" "201604"
                 cmd = "\"" + _command.toLowerCase() + "\""
                         + " \"" + binDir + "/" + extractResourceListScript + "\""
                         + " \"" + inputDir + "/" + excelResourceList + "\""
@@ -244,7 +243,7 @@ public class ScriptRunner {
                         + " \"" + lastBatchId + "\"";
                 break;
             case BremConstants.EXTRACT_INDIVIDUAL_LIST:
-                //cscript ExtractIndividualReports.vbs "C:\atri\in\GDC Manila Resource List template v1 0.txt" "C:\atri\in\201603 - BDG_TimeReport_V2.xlsx" "Summary" "Detailed Entry Exit Pair" "Detailed Raw" "C:\atri\out" 201604
+                //"cscript.exe" "c:\trem\bin/ExtractIndividualReports.vbs" "c:\trem\in/ResourceList.txt" "c:\trem\in/201603 - BDG_TimeReport_V2.xlsx" "Summary" "Detailed Entry Exit Pair" "Detailed Raw" "C:\trem\out" "201604"
                 cmd = "\"" + _command.toLowerCase() + "\""
                         + " \"" + binDir + "/" + extractIndividualScript + "\""
                         + " \"" + inputDir + "/" + txtResourcelist + "\""
@@ -256,7 +255,7 @@ public class ScriptRunner {
                         + " \"" + lastBatchId + "\"";
                 break;
             case BremConstants.EXTRACT_MANAGER_LIST:
-                //cscript ExtractGroupReports.vbs "C:\atri\in\GDC Manila Resource List template v1 0.txt" "C:\atri\in\201603 - BDG_TimeReport_V2.xlsx" "Summary" "Detailed Entry Exit Pair" "Detailed Raw" "C:\atri\out" 201604 Practice
+                //"cscript.exe" "c:\trem\bin/ExtractGroupReports.vbs" "c:\trem\in/ResourceList.txt" "c:\trem\in/ManagersList.txt" "c:\trem\in/201603 - BDG_TimeReport_V2.xlsx" "Summary" "Detailed Entry Exit Pair" "Detailed Raw" "C:\trem\out" "201604" "Practice"
                 cmd = "\"" + _command.toLowerCase() + "\""
                         + " \"" + binDir + "/" + extractManagerScript + "\""
                         + " \"" + inputDir + "/" + txtResourcelist + "\""
@@ -270,7 +269,7 @@ public class ScriptRunner {
                         + " \"" + tagMngrRept + "\"";
                 break;
             case BremConstants.EMAIL_ALL:
-                //powershell -ExecutionPolicy ByPass -File .\mailer.ps1 "C:\atri\in\GDC Manila Resource List template v1 0.txt" "C:\atri\in\GDC Manila Resource List template v1 0.Managers.txt" "C:\atri\out" jl186034@teradata.com outlook.td.teradata.com 201604 "Practice" "THIS IS A TEST"
+                //powershell.exe -executionpolicy bypass -file  c:\trem\bin/SendMailAll.ps1 "c:\trem\in/ResourceList.txt" "c:\trem\in/ManagersList.txt" "C:\trem\out" "jl186034@teradata.com" "localhost" "201604" "Practice" "in-script" "c:\trem\log"
                 cmd = _command.toLowerCase()
                         + " " + binDir + "/" + emailAllScript
                         + " \"" + inputDir + "/" + txtResourcelist + "\""
@@ -297,7 +296,7 @@ public class ScriptRunner {
 //                    + " \"" + _propertiesFile.getValueAt(24, 2) + "\""};
 //                break;
             case BremConstants.EMAIL_SINGLE:
-                //powershell -ExecutionPolicy ByPass -File .\SendMailIndividual.ps1 "C:\atri\in" jl186034@teradata.com jl186034@teradata.com localhost 201604 "THIS A TEST"
+                //powershell.exe -executionpolicy bypass -file  c:\trem\bin/SendMailIndividual.ps1 "c:\trem\in/201603 - BDG_TimeReport_V2.xlsx" "jl186034@teradata.com" "jl186034@teradata.com" "localhost" "201604" "in-script" "c:\trem\log" "Practice"
                 cmd = _command.toLowerCase()
                         + " " + binDir + "/" + emailIndividualScript
                         + " \"" + inputDir + "/" + excelBadgeReport + "\""
