@@ -74,7 +74,7 @@ function Send-Mail-Group {
             }     
     } else {
         #Write-host  -ForegroundColor Red "[$(Get-Date)] $emailAttachments was not found!"
-        $Global:nCtr++
+        #$Global:nCtr++
     }
 }
 
@@ -121,7 +121,7 @@ param(
             }        
     } else {
         #Write-host  -ForegroundColor Red "[$(Get-Date)] $emailAttachments was not found!"
-        $Global:nCtr++
+        #$Global:nCtr++
     }
 }
 
@@ -190,9 +190,9 @@ $domain = $aSMTPServer[$aSMTPServer.GetUpperBound(0)-1] + "." + $tld
 #Initialize Re-process flag
 $repro = 0
 #Remove logs and result file first
-$logFile = "smtp.$argsBatchID.log"
-$grpLogFile = "smtp.$argsBatchID.$argsMngrRptTag.log"
-$unsentFile = "unsent.$argsBatchID.log"
+$logFile = "$argsBatchID.smtp.log"
+$grpLogFile = "$argsBatchID.smtp.$argsMngrRptTag.log"
+$unsentFile = "$argsBatchID.unsent.log"
 $isoDate = Get-Date -format yyyyMMddHHmmss
 
 if ($(Test-Path "$argsLogDir\$logFile") -eq 1)
@@ -271,9 +271,9 @@ Clear-Variable isoDate
 #Initialize Re-process flag
 $repro = 0
 #Remove logs and result file first
-$logFile = "smtp.$argsBatchID.$argsMngrRptTag.log"
-$indLogFile = "smtp.$argsBatchID.log"
-$unsentFile = "unsent.$argsBatchID.$argsMngrRptTag.log"
+$logFile = "$argsBatchID.$argsMngrRptTag.smtp.log"
+$indLogFile = "$argsBatchID.smtp.log"
+$unsentFile = "$argsBatchID.unsent.$argsMngrRptTag.log"
 $isoDate = Get-Date -format yyyyMMddHHmmss
 
 if ($(Test-Path "$argsLogDir\$logFile") -eq 1)
