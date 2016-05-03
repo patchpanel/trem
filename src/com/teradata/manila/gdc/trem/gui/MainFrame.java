@@ -531,7 +531,7 @@ class MainFrame extends javax.swing.JFrame {
         PropertiesFile pf = new PropertiesFile();
         String now = new java.text.SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date());
 
-        String filename = pf.getLogDir() + "\\" + now + "trem.log";
+        String filename = pf.getLogDir() + "\\" + now + ".trem.log";
         System.out.println(filename);
         ScriptLogger logger = new ScriptLogger(filename, commandTextArea);
     }
