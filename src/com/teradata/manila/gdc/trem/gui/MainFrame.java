@@ -116,7 +116,7 @@ class MainFrame extends javax.swing.JFrame {
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Time Report - [Extractor-Mailer]");
+        setTitle("Time Report [Extractor-Mailer] Release 1");
         setLocationByPlatform(true);
         setName("mainFrame"); // NOI18N
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -515,7 +515,7 @@ class MainFrame extends javax.swing.JFrame {
         PropertiesFile pf = new PropertiesFile();
         String now = new java.text.SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date());
 
-        String filename = pf.getLogDir() + "\\trem." + now + ".log";
+        String filename = pf.getLogDir() + "\\" + now + "trem.log";
         System.out.println(filename);
         ScriptLogger logger = new ScriptLogger(filename, commandTextArea);
     }
