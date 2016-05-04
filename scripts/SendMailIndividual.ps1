@@ -62,7 +62,10 @@ catch [System.Exception]
 $lockPath = "$env:APPDATA\trem"
 if (($(Test-Path "$lockPath\tremind.$argsBatchID.lck") -eq 1) -and ($(Test-Path "$lockPath\tremgrp.$argsBatchID.lck") -eq 1)) {
 	Write-Host  -ForegroundColor Red "[$(Get-Date)] Reporting Period $argsBatchID is already closed. Please Enter a new period to proceed."
-	Exit 69;
+	if ($(Test-Path "$lockPath\$argsBatchID.pw") -eq 1) {
+		Remove-Item "$lockPath\$argsBatchID.pw" -Force
+	}
+	Exit 69
 }
 
 #Don't continue if there unsent emails from previous script
@@ -80,12 +83,12 @@ $domain = $aSMTPServer[$aSMTPServer.GetUpperBound(0)-1] + "." + $tld
 #Get and Save credentials before sending emails
 $pw = $null
 $cred = $null
-if ($(Test-Path "$argsTempDir\$argsBatchID.pw") -eq 0)
+if ($(Test-Path "$lockPath\$argsBatchID.pw") -eq 0)
 {
-	(Get-Credential).password | ConvertFrom-SecureString > "$argsTempDir\$argsBatchID.pw"
-    Write-Host -ForegroundColor Cyan "$argsTempDir\$argsBatchID.pw created"
+	(Get-Credential).password | ConvertFrom-SecureString > "$lockPath\$argsBatchID.pw"
+    #Write-Host -ForegroundColor Cyan "$lockPath\$argsBatchID.pw created"
 }
-$pw = Get-Content "$argsTempDir\$argsBatchID.pw" | ConvertTo-SecureString
+$pw = Get-Content "$lockPath\$argsBatchID.pw" | ConvertTo-SecureString
 $cred = New-Object System.Management.Automation.PSCredential "MailUser", $pw
 
 #Check the Badge report file

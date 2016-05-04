@@ -1,4 +1,4 @@
-﻿#powershell.exe -executionpolicy bypass -file  c:\trem\bin/SendMailAll.ps1 "c:\trem\in/ResourceList.txt" "c:\trem\in/ManagersList.txt" "C:\trem\out" "jl186034@teradata.com" "localhost" "201604" "Practice" "in-script" "c:\trem\log"
+﻿#powershell.exe -executionpolicy bypass -file  c:\trem\bin/SendMailAll.ps1 "c:\trem\in/ResourceList.txt" "c:\trem\in/ManagersList.txt" "C:\trem\out" "jl186034@teradata.com" "localhost" "201604" "Practice" "in-script" "c:\trem\log" "c:\trem\tmp"
 #Badge Reports Manila QLID: bm230103
 param (
     [String]$argsResourceList = $(throw "-Resource List is required."),
@@ -179,7 +179,10 @@ catch [System.Exception]
 $lockPath = "$env:APPDATA\trem"
 if (($(Test-Path "$lockPath\tremind.$argsBatchID.lck") -eq 1) -and ($(Test-Path "$lockPath\tremgrp.$argsBatchID.lck") -eq 1)) {
 	Write-Host  -ForegroundColor Red "[$(Get-Date)] Reporting Period $argsBatchID is already closed. Please Enter a new period to proceed."
-	Exit 69;
+	if ($(Test-Path "$lockPath\$argsBatchID.pw") -eq 1) {
+		Remove-Item "$lockPath\$argsBatchID.pw" -Force
+	}
+	Exit 69
 }
 
 #Check if input files exist
@@ -216,12 +219,12 @@ $domain = $aSMTPServer[$aSMTPServer.GetUpperBound(0)-1] + "." + $tld
 #Get and Save credentials before sending emails
 $pw = $null
 $cred = $null
-if ($(Test-Path "$argsTempDir\$argsBatchID.pw") -eq 0)
+if ($(Test-Path "$lockPath\$argsBatchID.pw") -eq 0)
 {
-	(Get-Credential).password | ConvertFrom-SecureString > "$argsTempDir\$argsBatchID.pw"
-    Write-Host -ForegroundColor Cyan "$argsTempDir\$argsBatchID.pw created"
+	(Get-Credential).password | ConvertFrom-SecureString > "$lockPath\$argsBatchID.pw"
+    #Write-Host -ForegroundColor Cyan "$lockPath\$argsBatchID.pw created"
 }
-$pw = Get-Content "$argsTempDir\$argsBatchID.pw" | ConvertTo-SecureString
+$pw = Get-Content "$lockPath\$argsBatchID.pw" | ConvertTo-SecureString
 $cred = New-Object System.Management.Automation.PSCredential "MailUser", $pw
 
 #+-------------------------------------------------------+'
