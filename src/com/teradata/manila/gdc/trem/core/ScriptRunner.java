@@ -280,7 +280,8 @@ public class ScriptRunner {
                         + " \"" + lastBatchId + "\""
                         + " \"" + tagMngrRept + "\""
                         + " \"" + emailBody + "\""
-                        + " \"" + logDir + "\"";
+                        + " \"" + logDir + "\""
+                        + " \"" + tempDir + "\"";
                 break;
 //            case BremConstants.EMAIL_GROUP:
 //                //powershell -ExecutionPolicy ByPass -File .\mailer.ps1 "C:\atri\in\GDC Manila Resource List template v1 0.txt" "C:\atri\in\GDC Manila Resource List template v1 0.Managers.txt" "C:\atri\out" jl186034@teradata.com outlook.td.teradata.com 201604 "Practice" "THIS IS A TEST"
@@ -306,7 +307,8 @@ public class ScriptRunner {
                         + " \"" + lastBatchId + "\""
                         + " \"" + emailBody + "\""
                         + " \"" + logDir + "\""
-                        + " \"" + tagMngrRept + "\"";
+                        + " \"" + tagMngrRept + "\""
+                        + " \"" + tempDir + "\"";
                 break;
             case BremConstants.ARCHIVE_OUT:
                 //powershell -ExecutionPolicy ByPass -File .\archiver.ps1 "c:\brem\out" "c:\brem\archive" "c:\brem\log" "OUT" 1
