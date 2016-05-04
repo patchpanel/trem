@@ -32,10 +32,10 @@ ForEach {
 	$fileName = $_.FullName
 	try { 
 		Move-Item $_.FullName -destination $newArchPath -force -ErrorAction:SilentlyContinue 
-		"Successfully moved $fileName to $newArchPath" | add-content "$logPath\$date.log.txt" 
+		"Successfully moved $fileName to $newArchPath" | add-content "$logPath\$date.archive.log" 
 	} 
 	catch { 
-		"Error moving $_ " | add-content "$logPath\$date.log.txt" 
+		"Error moving $_ " | add-content "$logPath\$date.archive.log" 
 	} 
 }
 

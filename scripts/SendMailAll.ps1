@@ -271,7 +271,7 @@ Clear-Variable isoDate
 #Initialize Re-process flag
 $repro = 0
 #Remove logs and result file first
-$logFile = "$argsBatchID.$argsMngrRptTag.smtp.log"
+$logFile = "$argsBatchID.smtp.$argsMngrRptTag.log"
 $indLogFile = "$argsBatchID.smtp.log"
 $unsentFile = "$argsBatchID.unsent.$argsMngrRptTag.log"
 $isoDate = Get-Date -format yyyyMMddHHmmss
