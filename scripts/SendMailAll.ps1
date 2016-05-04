@@ -1,16 +1,18 @@
 ﻿#powershell.exe -executionpolicy bypass -file  c:\trem\bin/SendMailAll.ps1 "c:\trem\in/ResourceList.txt" "c:\trem\in/ManagersList.txt" "C:\trem\out" "jl186034@teradata.com" "localhost" "201604" "Practice" "in-script" "c:\trem\log"
 #Badge Reports Manila QLID: bm230103
 param (
-    [string]$argsResourceList = $(throw "-Resource List is required."),
-    [string]$argsManagerList = $(throw "-Manager List is required."), 
-    [string]$argsExcelOutputDir = $(throw "-Excel output Directory is required."),
-    [string]$argsFromEmailAddress = $(throw "-FromEmailAddress is required."),
-    [string]$argsSMTPServer = $(throw "-EmailSMPTServer is required."),
-    [string]$argsBatchID = $(throw "-BatchID is required."),
-    [string]$argsMngrRptTag = $(throw "-Manager Report Tag is required."),
-    [string]$argsEmailBody = $(throw "-Email Body is required."),
-    [string]$argsLogDir = $(throw "-Log Directory is required.")
+    [String]$argsResourceList = $(throw "-Resource List is required."),
+    [String]$argsManagerList = $(throw "-Manager List is required."), 
+    [String]$argsExcelOutputDir = $(throw "-Excel output Directory is required."),
+    [String]$argsFromEmailAddress = $(throw "-FromEmailAddress is required."),
+    [String]$argsSMTPServer = $(throw "-EmailSMPTServer is required."),
+    [String]$argsBatchID = $(throw "-BatchID is required."),
+    [String]$argsMngrRptTag = $(throw "-Manager Report Tag is required."),
+    [String]$argsEmailBody = $(throw "-Email Body is required."),
+    [String]$argsLogDir = $(throw "-Log Directory is required."),
+	[String]$argsTempDir = $(throw "-Temp Directory is required.")
 )
+
 Set-Variable -Name emailBody -Visibility Private
 Set-Variable -Name lineResources -Visibility Private
 Set-Variable -Name aResources -Visibility Private
@@ -35,7 +37,8 @@ $nCtr = 0
 
 function Send-Mail-Group {
     param(
-    [String]$resources
+    [String]$resources,
+	[System.Management.Automation.PSCredential]$credentials
 )
     $aResources = $resources.Split("|")
     $qlid = $aResources[0].ToLower().Trim()
@@ -47,19 +50,33 @@ function Send-Mail-Group {
     $flgEAexists = Test-Path $emailAttachments
    
     if ($flgEAexists -eq 1) {
+			Write-host  -ForegroundColor Cyan "[$(Get-Date)] Sending to $resourceName."
             try {
-                send-mailmessage -ErrorAction Stop `
-                -from $argsFromEmailAddress `
-                -to $emailAddress `
-                -subject $emailSubject `
-                -smtpServer $argsSMTPServer `
-                -body $emailBody `
-                -Attachments $emailAttachments `
-                -DeliveryNotificationOption OnFailure `
-                -Priority High `
-                -Port 25 `
-    
-                $Global:mCtr++
+				if (($argsSMTPServer.ToLower() -eq "localhost") -or ($argsSMTPServer.ToLower() -eq "127.0.0.1")) {
+					send-mailmessage -ErrorAction Stop `
+					-from $argsFromEmailAddress `
+					-to $emailAddress `
+					-subject $emailSubject `
+					-smtpServer $argsSMTPServer `
+					-body $emailBody `
+					-Attachments $emailAttachments `
+					-DeliveryNotificationOption OnFailure `
+					-Priority High `
+					-Port 25 `
+				} else {
+					send-mailmessage -ErrorAction Stop `
+					-Credential $credentials `
+					-from $argsFromEmailAddress `
+					-to $emailAddress `
+					-subject $emailSubject `
+					-smtpServer $argsSMTPServer `
+					-body $emailBody `
+					-Attachments $emailAttachments `
+					-DeliveryNotificationOption OnFailure `
+					-Priority High `
+					-Port 25
+				}
+            $Global:mCtr++
             }  catch {
                 #Record Failed sending
                 $resources | Out-File "$argsLogDir\$unsentFile" -Encoding unicode -Append
@@ -78,10 +95,10 @@ function Send-Mail-Group {
     }
 }
 
-
 function Send-Mail-Individual {
 param(
-    [String]$resources
+    [String]$resources,
+	[System.Management.Automation.PSCredential]$credentials
 )
     #Build send-mailmessage params
     $aResources = $resources.Split("|")
@@ -94,19 +111,33 @@ param(
     $flgEAexists = Test-Path $emailAttachments
     #If attachment exists, go send it
     if ($flgEAexists -eq 1) {
+			Write-host  -ForegroundColor Cyan "[$(Get-Date)] Sending to $resourceName."
             try {
-                send-mailmessage -ErrorAction Stop `
-                -from $argsFromEmailAddress `
-                -to $emailAddress `
-                -subject $emailSubject `
-                -smtpServer $argsSMTPServer `
-                -body $emailBody `
-                -Attachments $emailAttachments `
-                -DeliveryNotificationOption OnFailure `
-                -Priority High `
-                -Port 25 `
-    
-                $Global:mCtr++
+				if (($argsSMTPServer.ToLower() -eq "localhost") -or ($argsSMTPServer.ToLower() -eq "127.0.0.1")) {
+					send-mailmessage -ErrorAction Stop `
+					-from $argsFromEmailAddress `
+					-to $emailAddress `
+					-subject $emailSubject `
+					-smtpServer $argsSMTPServer `
+					-body $emailBody `
+					-Attachments $emailAttachments `
+					-DeliveryNotificationOption OnFailure `
+					-Priority High `
+					-Port 25 `
+				} else {
+					send-mailmessage -ErrorAction Stop `
+					-Credential $credentials `
+					-from $argsFromEmailAddress `
+					-to $emailAddress `
+					-subject $emailSubject `
+					-smtpServer $argsSMTPServer `
+					-body $emailBody `
+					-Attachments $emailAttachments `
+					-DeliveryNotificationOption OnFailure `
+					-Priority High `
+					-Port 25
+				}
+            $Global:mCtr++
             }  catch {
                 #Record Failed sending
                 $resources | Out-File "$argsLogDir\$unsentFile" -Encoding unicode -Append
@@ -124,7 +155,6 @@ param(
         #$Global:nCtr++
     }
 }
-
 
 #+-------------------------------------------------------+'
 #|                 Main Program                          |'
@@ -178,10 +208,21 @@ if ($(Test-Path $argsLogDir) -eq 0)
     Exit 99
 }
 
+
 #Build Domain name
 $aSMTPServer = $argsSMTPServer.Split(".")
 $tld = $aSMTPServer[$aSMTPServer.GetUpperBound(0)]
 $domain = $aSMTPServer[$aSMTPServer.GetUpperBound(0)-1] + "." + $tld
+#Get and Save credentials before sending emails
+$pw = $null
+$cred = $null
+if ($(Test-Path "$argsTempDir\$argsBatchID.pw") -eq 0)
+{
+	(Get-Credential).password | ConvertFrom-SecureString > "$argsTempDir\$argsBatchID.pw"
+    Write-Host -ForegroundColor Cyan "$argsTempDir\$argsBatchID.pw created"
+}
+$pw = Get-Content "$argsTempDir\$argsBatchID.pw" | ConvertTo-SecureString
+$cred = New-Object System.Management.Automation.PSCredential "MailUser", $pw
 
 #+-------------------------------------------------------+'
 #|                 SEND INDIVIDUAL REPORTS               |'
@@ -221,7 +262,7 @@ if ($(Test-Path "$lockPath\tremind.$argsBatchID.lck") -eq 0) {
     if ($repro -eq 1) {
         #Use the backup file since resending emails will produce the original filename
         foreach ($line in Get-Content "$argsLogDir\$unsentFile.$isoDate") {
-             Send-Mail-Individual -resources $line
+             Send-Mail-Individual -resources $line -credentials $cred
         }
         #Create lock file if completed. Transferred to Java GUI
         #if (($(Test-Path "$argsLogDir\$logFile") -eq 0) -and ($(Test-Path "$argsLogDir\$unsentFile") -eq 0) -and ($Global:nCtr -eq 0)) {
@@ -236,7 +277,7 @@ if ($(Test-Path "$lockPath\tremind.$argsBatchID.lck") -eq 0) {
 			Remove-Item "$argsLogDir\$logFile*" -Force
 			Remove-Item "$argsLogDir\$unsentFile*" -Force
 			foreach ($line in Get-Content $argsResourceList) {
-				 Send-Mail-Individual -resources $line
+				 Send-Mail-Individual -resources $line -credentials $cred
 			}
 		}
         #Create lock file if completed. Transferred to Java GUI
@@ -302,7 +343,7 @@ if ($(Test-Path "tremgrp.$argsBatchID.lck") -eq 0) {
     if ($repro -eq 1) {
         #Use the backup file since resending emails will produce the original filename
         foreach ($line in Get-Content "$argsLogDir\$unsentFile.$isoDate") {
-            Send-Mail-Group -resources $line
+            Send-Mail-Group -resources $line -credentials $cred
         }
         #Create lock file if completed. Transferred to Java GUI
         #if (($(Test-Path "$argsLogDir\$logFile") -eq 0) -and ($(Test-Path "$argsLogDir\$unsentFile") -eq 0) -and ($Global:nCtr -eq 0)) {
@@ -319,7 +360,7 @@ if ($(Test-Path "tremgrp.$argsBatchID.lck") -eq 0) {
 			Remove-Item "$argsLogDir\$logFile*" -Force
 			Remove-Item "$argsLogDir\$unsentFile*" -Force
 			foreach ($line in Get-Content $argsManagerList) {
-				Send-Mail-Group -resources $line
+				Send-Mail-Group -resources $line -credentials $cred
 			}
 		}
         #Create lock file if completed. Transferred to Java GUI

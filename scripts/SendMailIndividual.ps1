@@ -8,7 +8,8 @@ param (
 	[string]$argsBatchID = $(throw "-BatchID is required."),
 	[string]$argsEmailBody = $(throw "-Email Body is required."),
 	[string]$argsLogDir = $(throw "-Log Directory is required."),
-	[string]$argsMngrRptTag = $(throw "-Manager tag is required.")
+	[string]$argsMngrRptTag = $(throw "-Manager tag is required."),
+	[String]$argsTempDir = $(throw "-Temp Directory is required.")
 )
 
 
@@ -76,7 +77,18 @@ if (($(Test-Path "$argsLogDir\$grpLogFile") -eq 1) -or ($(Test-Path "$argsLogDir
 $aSMTPServer = $argsSMTPServer.Split(".")
 $tld = $aSMTPServer[$aSMTPServer.GetUpperBound(0)]
 $domain = $aSMTPServer[$aSMTPServer.GetUpperBound(0)-1] + "." + $tld
+#Get and Save credentials before sending emails
+$pw = $null
+$cred = $null
+if ($(Test-Path "$argsTempDir\$argsBatchID.pw") -eq 0)
+{
+	(Get-Credential).password | ConvertFrom-SecureString > "$argsTempDir\$argsBatchID.pw"
+    Write-Host -ForegroundColor Cyan "$argsTempDir\$argsBatchID.pw created"
+}
+$pw = Get-Content "$argsTempDir\$argsBatchID.pw" | ConvertTo-SecureString
+$cred = New-Object System.Management.Automation.PSCredential "MailUser", $pw
 
+#Check the Badge report file
 $flgBadgeReptExists = Test-Path $argsExceBadgeReport
 if ($flgBadgeReptExists -eq 0)
 {
@@ -109,21 +121,32 @@ $emailBody = "Hi,`r`n`r`nAttached is the Badge Report for the aforementioned mon
 	if ($flgEAexists -eq 1) {
 		$logFile = "$argsBatchID.smtp.Individual.log" 
 		try
-		{
-			$message = "[$(Get-Date)] Sending to $emailAddress"                
-			Write-host $message
-
-			send-mailmessage `
-			-from $argsFromEmailAddress `
-			-to $emailAddress `
-			-subject $emailSubject `
-			-smtpServer $argsSMTPServer `
-			-body $emailBody `
-			-Attachments $emailAttachments `
-			-DeliveryNotificationOption OnFailure `
-			-Priority High `
-			-Port 25 `
-			
+		{             
+			Write-host -ForegroundColor Cyan "[$(Get-Date)] Sending to $emailAddress" 
+			if (($argsSMTPServer.ToLower() -eq "localhost") -or ($argsSMTPServer.ToLower() -eq "127.0.0.1")) {
+				send-mailmessage -ErrorAction Stop `
+				-from $argsFromEmailAddress `
+				-to $emailAddress `
+				-subject $emailSubject `
+				-smtpServer $argsSMTPServer `
+				-body $emailBody `
+				-Attachments $emailAttachments `
+				-DeliveryNotificationOption OnFailure `
+				-Priority High `
+				-Port 25 `
+			} else {
+				send-mailmessage -ErrorAction Stop `
+				-Credential $cred `
+				-from $argsFromEmailAddress `
+				-to $emailAddress `
+				-subject $emailSubject `
+				-smtpServer $argsSMTPServer `
+				-body $emailBody `
+				-Attachments $emailAttachments `
+				-DeliveryNotificationOption OnFailure `
+				-Priority High `
+				-Port 25
+			}
 			$mCtr++
 		}                        
 		catch [System.Exception]
