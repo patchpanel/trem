@@ -395,6 +395,8 @@ class MainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_closePeriodMenutItemActionPerformed
 
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // End of variables declaration//GEN-END:variables
     private void buildParameterTable(javax.swing.JTable table, PropertiesFile pf) {
         javax.swing.table.TableModel model = table.getModel();
 
