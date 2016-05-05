@@ -303,21 +303,15 @@ class MainFrame extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_archiveMenuItemActionPerformed
+    private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {                                                
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 About dialog = new About(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
                 dialog.setLocationRelativeTo(null);
                 dialog.setVisible(true);
             }
         });
-    }//GEN-LAST:event_archiveMenuItemActionPerformed
+    }                                               
 
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
         cleanUp();
@@ -468,7 +462,7 @@ class MainFrame extends javax.swing.JFrame {
         table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
             public java.awt.Component getTableCellRendererComponent(javax.swing.JTable table,
-                                                                    Object value, boolean isSelected, boolean hasFocus, int row, int col) {
+                    Object value, boolean isSelected, boolean hasFocus, int row, int col) {
 
                 super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
 
