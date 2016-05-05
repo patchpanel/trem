@@ -317,7 +317,7 @@ class MainFrame extends javax.swing.JFrame {
                 dialog.setVisible(true);
             }
         });
-    }
+    }//GEN-LAST:event_archiveMenuItemActionPerformed
 
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
         cleanUp();
@@ -394,7 +394,6 @@ class MainFrame extends javax.swing.JFrame {
             processButton.setEnabled(extractReportsCheckBox.isSelected() || emailReportsCheckBox.isSelected());
         }
     }//GEN-LAST:event_closePeriodMenutItemActionPerformed
-    // End of variables declaration//GEN-END:variables
 
     private void buildParameterTable(javax.swing.JTable table, PropertiesFile pf) {
         javax.swing.table.TableModel model = table.getModel();
