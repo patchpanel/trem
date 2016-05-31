@@ -1,3 +1,9 @@
+'============================================================================
+'REVISIONS:
+'DATE       Description
+'2016-05-31 Added support for 2 additional columns for Premium hours.Cols L, M
+'           Added column sorting for Names and dates since input file sometimes does not come in sorted
+'============================================================================
 '"cscript.exe" "c:\trem\bin/ExtractGroupReports.vbs" "c:\trem\in/ResourceList.txt" "c:\trem\in/ManagersList.txt" "c:\trem\in/201603 - BDG_TimeReport_V2.xlsx" "Summary" "Detailed Entry 
 Option Explicit
 
@@ -51,8 +57,8 @@ year = Left(a_batchid,4)
 month = Right(a_batchid,2)
 thedate =  "01-" & month & "-" & year
 if IsDate(thedate) = false Then
-	Wscript.Echo "Please enter a valid Batch ID (YYYYMM)"
-	Wscript.Quit 99
+    Wscript.Echo "Please enter a valid Batch ID (YYYYMM)"
+    Wscript.Quit 99
 End if
 'Check for period close first
 Dim appDataDir: appDataDir = GetAppDataDir
@@ -61,8 +67,8 @@ indLck = appDataDir & "\trem\tremind." & a_batchid & ".lck"
 grpLck = appDataDir & "\trem\tremgrp." & a_batchid & ".lck"
 
 If CheckFileExist(indLck) = True  And CheckFileExist(grpLck) = True Then
-	Wscript.echo "[" & Now & "]" & ": Reporting Period " & thedate & " is already closed. Please Enter a new period to proceed."
-	WScript.Quit 69
+    Wscript.echo "[" & Now & "]" & ": Reporting Period " & thedate & " is already closed. Please Enter a new period to proceed."
+    WScript.Quit 69
 End If
 
 Wscript.echo "[" & Now & "]" & ": " & "==============================================================="
@@ -71,23 +77,23 @@ Wscript.echo "[" & Now & "]" & ": " & "=========================================
 
 
 If CheckFileExist(a_resourceList) = False Then
-	Wscript.echo "[" & Now & "]" & ": " & a_resourceList & " not found!"
-	WScript.Quit 99
+    Wscript.echo "[" & Now & "]" & ": " & a_resourceList & " not found!"
+    WScript.Quit 99
 End If
 
 If CheckFileExist(a_managerList) = False Then
-	Wscript.echo "[" & Now & "]" & ": " & a_managerList & " not found!"
-	WScript.Quit 99
+    Wscript.echo "[" & Now & "]" & ": " & a_managerList & " not found!"
+    WScript.Quit 99
 End If
 
 If CheckFileExist(a_badgeReport) = False Then
-	Wscript.echo "[" & Now & "]" & ": " & a_badgeReport & " not found!"
-	WScript.Quit 99
+    Wscript.echo "[" & Now & "]" & ": " & a_badgeReport & " not found!"
+    WScript.Quit 99
 End If
 
 If CheckFolderExist(a_outputDir) = False Then
-	Wscript.echo "[" & Now & "]" & ": " & a_outputDir & " does not exist!"
-	WScript.Quit 99
+    Wscript.echo "[" & Now & "]" & ": " & a_outputDir & " does not exist!"
+    WScript.Quit 99
 End If
 
 'Backup the Badge Report first
@@ -127,340 +133,345 @@ Wscript.echo "[" & Now & "]" & ": " & "=========================================
 Wscript.Quit
 
 Function BuildPracticeReport (byval resourceList, byval badgeReport)
-	BuildPracticeReport = ""
-	'Open the Excel app
-	Set objExcel = CreateObject("Excel.Application")
-	objExcel.Visible = False
-	objExcel.DisplayAlerts = False
-	Set objWorkbook = objExcel.Workbooks.Open(badgeReport)
+    BuildPracticeReport = ""
+    'Open the Excel app
+    Set objExcel = CreateObject("Excel.Application")
+    objExcel.Visible = False
+    objExcel.DisplayAlerts = False
+    Set objWorkbook = objExcel.Workbooks.Open(badgeReport)
 
-	'Check if workbook has contents
-	If (objExcel.WorksheetFunction.CountA("A1:K1") = 0 Or (CInt(objWorkbook.Worksheets.Count) <= 2)) Then 
+    'Check if workbook has contents
+    If (objExcel.WorksheetFunction.CountA("A1:M1") = 0 Or (CInt(objWorkbook.Worksheets.Count) <= 2)) Then 
         Wscript.echo "[" & Now & "]" & ": " & badgeReport & " is empty or has missing worksheets. Please check the file."
-		objWorkbook.Close
-		objExcel.Quit
-		Set objWorkbook = nothing
-		Set objExcel = nothing
-		Wscript.Quit 99
-	End If 
-	'Continue if ok
-	
-	Dim oFso, reader
-	'Parse the Resource List text file
-	Set oFso = CreateObject("Scripting.FileSystemObject")
-	If oFso.FileExists(resourceList) Then
-		Dim arrLine, sLine, empName, mngrName
-		Dim mCtr: mCtr = 0
-		Dim nCtr: nCtr = 0
-		Set reader = oFso.OpenTextFile(resourceList, ForReading, True)
-		Do Until reader.AtEndOfStream
-			sLine = reader.Readline
-			arrLine = Split(sLine, "|", -1, 1)
-			empName = Trim(arrLine(1))
-			mngrName = Trim(arrLine(3))
-			If MatchEmployee(empName, mngrName) = True then
-				'WScript.echo "[" & Now & "]" & ": " & empName & Chr(9) & "Match"
-				mCtr = mCtr + 1
-			Else
-				'WScript.echo "[" & Now & "]" & ": " & empName & Chr(9) & "*No Match*"
-				nCtr = nCtr + 1
-			End if
-		Loop
-		reader.close
-		Set reader = nothing
-		Set oFso = Nothing
-	Else
-		WScript.echo "[" & Now & "]" & ": " & resourceList & " Does not Exist"
-	End If
+        objWorkbook.Close
+        objExcel.Quit
+        Set objWorkbook = nothing
+        Set objExcel = nothing
+        Wscript.Quit 99
+    End If 
+    'Continue if ok
+    
+    Dim oFso, reader
+    'Parse the Resource List text file
+    Set oFso = CreateObject("Scripting.FileSystemObject")
+    If oFso.FileExists(resourceList) Then
+        Dim arrLine, sLine, empName, mngrName
+        Dim mCtr: mCtr = 0
+        Dim nCtr: nCtr = 0
+        Set reader = oFso.OpenTextFile(resourceList, ForReading, True)
+        Do Until reader.AtEndOfStream
+            sLine = reader.Readline
+            arrLine = Split(sLine, "|", -1, 1)
+            empName = Trim(arrLine(1))
+            mngrName = Trim(arrLine(3))
+            If MatchEmployee(empName, mngrName) = True then
+                'WScript.echo "[" & Now & "]" & ": " & empName & Chr(9) & "Match"
+                mCtr = mCtr + 1
+            Else
+                'WScript.echo "[" & Now & "]" & ": " & empName & Chr(9) & "*No Match*"
+                nCtr = nCtr + 1
+            End if
+        Loop
+        reader.close
+        Set reader = nothing
+        Set oFso = Nothing
+    Else
+        WScript.echo "[" & Now & "]" & ": " & resourceList & " Does not Exist"
+    End If
 
-	objWorkbook.Close True, badgeReport
-	objExcel.Quit
-	
-	BuildPracticeReport = mCtr & "|" & nCtr
+    objWorkbook.Close True, badgeReport
+    objExcel.Quit
+    
+    BuildPracticeReport = mCtr & "|" & nCtr
 End Function
 
 Function MatchEmployee(byval EmployeeName, byval ManagerName)
-	Dim objWorksheet, srcRange, lastRow
+    Dim objWorksheet, srcRange, lastRow
 
-	Dim fIsFound1: fIsFound1 = 0
-	Dim fIsFound2: fIsFound2 = 0
-	Dim fIsFound3: fIsFound3 = 0
-	
-	'==================================================
-	'Summary Processing.
-	'==================================================
-	Set objWorksheet = objWorkbook.Worksheets(1)
-	Set srcRange = objWorksheet.Range("A1:K1")
-	'Add heading to Manager Column
-	objWorksheet.Range("L1" & lastRow).value = "ManagerName"
-	
-	With objWorksheet
-		If .AutoFilterMode = False Then srcRange.AutoFilter
-		.Range("A1:K1").AutoFilter
-		.Range("A1:K1").AutoFilter 3, "=" & EmployeeName
-	End With
-	fIsFound1 = objWorksheet.AutoFilter.Range.Columns(1).SpecialCells(xlCellTypeVisible).Count
-	If fIsFound1 > 1 then
-		lastRow = objWorksheet.Range("A1").CurrentRegion.Rows.Count
-		objWorksheet.Range("L2:L" & lastRow).value = ManagerName
-		If objWorksheet.AutoFilterMode Then objWorksheet.AutoFilter.ShowAllData
-	End If
-	
-	'==================================================
-	'Detailed Entry Exit Pair Processing.
-	'==================================================
-	Set objWorksheet = objWorkbook.Worksheets(2)
-	Set srcRange = objWorksheet.Range("A1:K1")
-	'Add heading to Manager Column
-	objWorksheet.Range("L1" & lastRow).value = "ManagerName"
-	
-	With objWorksheet
-		If .AutoFilterMode = False Then srcRange.AutoFilter
-		.Range("A1:K1").AutoFilter
-		.Range("A1:K1").AutoFilter 3, "=" & EmployeeName
-	End With
-	fIsFound2 = objWorksheet.AutoFilter.Range.Columns(1).SpecialCells(xlCellTypeVisible).Count
-	If fIsFound2 > 1 then
-		lastRow = objWorksheet.Range("A1").CurrentRegion.Rows.Count
-		objWorksheet.Range("L2:L" & lastRow).value = ManagerName
-		If objWorksheet.AutoFilterMode Then objWorksheet.AutoFilter.ShowAllData
-	End If
-	
-	'==================================================
-	'Detailed Raw Processing.
-	'==================================================
-	Set objWorksheet = objWorkbook.Worksheets(3) 
-	Set srcRange = objWorksheet.Range("A1:H1")
-	'Add heading to Manager Column
-	objWorksheet.Range("I1" & lastRow).value = "ManagerName"
-	
-	With objWorksheet
-		If .AutoFilterMode = False Then srcRange.AutoFilter
-		.Range("A1:H1").AutoFilter
-		.Range("A1:H1").AutoFilter 3, "=" & EmployeeName
-	End With
-	fIsFound3 = objWorksheet.AutoFilter.Range.Columns(1).SpecialCells(xlCellTypeVisible).Count
-	If fIsFound3 > 1 then
-		lastRow = objWorksheet.Range("I1").CurrentRegion.Rows.Count
-		objWorksheet.Range("I2:I" & lastRow).value = ManagerName
-		If objWorksheet.AutoFilterMode Then objWorksheet.AutoFilter.ShowAllData
-	End If
-	
-	If fIsFound1 > 1 Or fIsFound2 > 1 Or fIsFound3 > 1 Then
-		MatchEmployee = True
-	Else
-		MatchEmployee = False
-	End If
-	
-	Set objWorksheet = Nothing
-	Set srcRange = Nothing
+    Dim fIsFound1: fIsFound1 = 0
+    Dim fIsFound2: fIsFound2 = 0
+    Dim fIsFound3: fIsFound3 = 0
+    
+    '==================================================
+    'Summary Processing.
+    '==================================================
+    Set objWorksheet = objWorkbook.Worksheets(1)
+    Set srcRange = objWorksheet.Range("A1:M1")
+    'Add heading to Manager Column
+    objWorksheet.Range("N1" & lastRow).value = "ManagerName"
+    
+    With objWorksheet
+        If .AutoFilterMode = False Then srcRange.AutoFilter
+        .Range("A1:M1").AutoFilter
+        .Range("A1:M1").AutoFilter 3, "=" & EmployeeName
+    End With
+    fIsFound1 = objWorksheet.AutoFilter.Range.Columns(1).SpecialCells(xlCellTypeVisible).Count
+    If fIsFound1 > 1 then
+        lastRow = objWorksheet.Range("A1").CurrentRegion.Rows.Count
+        objWorksheet.Range("N2:N" & lastRow).value = ManagerName
+        'objWorksheet.Columns("G").Replace " ",""
+        If objWorksheet.AutoFilterMode Then objWorksheet.AutoFilter.ShowAllData
+    End If
+    
+    '==================================================
+    'Detailed Entry Exit Pair Processing.
+    '==================================================
+    Set objWorksheet = objWorkbook.Worksheets(2)
+    Set srcRange = objWorksheet.Range("A1:K1")
+    'Add heading to Manager Column
+    objWorksheet.Range("L1" & lastRow).value = "ManagerName"
+    
+    With objWorksheet
+        If .AutoFilterMode = False Then srcRange.AutoFilter
+        .Range("A1:K1").AutoFilter
+        .Range("A1:K1").AutoFilter 3, "=" & EmployeeName
+    End With
+    fIsFound2 = objWorksheet.AutoFilter.Range.Columns(1).SpecialCells(xlCellTypeVisible).Count
+    If fIsFound2 > 1 then
+        lastRow = objWorksheet.Range("A1").CurrentRegion.Rows.Count
+        objWorksheet.Range("L2:L" & lastRow).value = ManagerName
+        If objWorksheet.AutoFilterMode Then objWorksheet.AutoFilter.ShowAllData
+    End If
+    
+    '==================================================
+    'Detailed Raw Processing.
+    '==================================================
+    Set objWorksheet = objWorkbook.Worksheets(3) 
+    Set srcRange = objWorksheet.Range("A1:H1")
+    'Add heading to Manager Column
+    objWorksheet.Range("I1" & lastRow).value = "ManagerName"
+    
+    With objWorksheet
+        If .AutoFilterMode = False Then srcRange.AutoFilter
+        .Range("A1:H1").AutoFilter
+        .Range("A1:H1").AutoFilter 3, "=" & EmployeeName
+    End With
+    fIsFound3 = objWorksheet.AutoFilter.Range.Columns(1).SpecialCells(xlCellTypeVisible).Count
+    If fIsFound3 > 1 then
+        lastRow = objWorksheet.Range("I1").CurrentRegion.Rows.Count
+        objWorksheet.Range("I2:I" & lastRow).value = ManagerName
+        If objWorksheet.AutoFilterMode Then objWorksheet.AutoFilter.ShowAllData
+    End If
+    
+    If fIsFound1 > 1 Or fIsFound2 > 1 Or fIsFound3 > 1 Then
+        MatchEmployee = True
+    Else
+        MatchEmployee = False
+    End If
+    
+    Set objWorksheet = Nothing
+    Set srcRange = Nothing
 End Function
 
 Function ExtractPracticeReport(byval managerlist, _
-							   byval srcExcelFile, _
-							   byval outputDir, _
-							   byval srcSheet1, _
-							   byval srcSheet2, _
-							   byval srcSheet3)
-	Dim objExcel, objWorkbook
-	Dim mngrName
-	Dim oFso, reader
-	
-	ExtractPracticeReport = ""
-	
-	Set objExcel = CreateObject("Excel.Application")
-	objExcel.Visible = False
-	objExcel.DisplayAlerts = False
-	Set objWorkbook = objExcel.Workbooks.Open(srcExcelFile)
-	'Extract the per practice report
-	Set oFso = CreateObject("Scripting.FileSystemObject")
-	If oFso.FileExists(managerlist) Then
-		Dim mCtr: mCtr = 0
-		Dim nCtr: nCtr = 0
-		Dim arrLine, sLine
-		Set reader = oFso.OpenTextFile(managerlist, ForReading, True)
-		Do Until reader.AtEndOfStream
-			sLine = reader.Readline
-			arrLine = Split(sLine, "|", -1, 1)
-			mngrName = Trim(arrLine(1))
-			If MatchManager(objExcel, _
-						    objWorkbook, _
-							outputDir, _
-							mngrName, _
-							srcSheet1, _
-							srcSheet2, _
-							srcSheet3) = True then
-				'WScript.echo "[" & Now & "]" & ": " & mngrName & Chr(9) & "Match"
-				mCtr = mCtr + 1
-			Else
-				WScript.echo "[" & Now & "]" & ": " & mngrName & Chr(9) & "*No Match*"
-				nCtr = nCtr + 1
-			End if
-		Loop
-		reader.close
-		Set reader = nothing
-		Set oFso = Nothing
-	Else
-		WScript.echo "[" & Now & "]" & ": " & managerlist & " Does not Exist"
-	End If
-	
-	objWorkbook.Close
-	objExcel.Quit
-	Set objExcel = Nothing
-	Set objWorkbook = Nothing
-	
-	ExtractPracticeReport = mCtr & "|" & nCtr
+                               byval srcExcelFile, _
+                               byval outputDir, _
+                               byval srcSheet1, _
+                               byval srcSheet2, _
+                               byval srcSheet3)
+    Dim objExcel, objWorkbook
+    Dim mngrName
+    Dim oFso, reader
+    
+    ExtractPracticeReport = ""
+    
+    Set objExcel = CreateObject("Excel.Application")
+    objExcel.Visible = False
+    objExcel.DisplayAlerts = False
+    Set objWorkbook = objExcel.Workbooks.Open(srcExcelFile)
+    'Extract the per practice report
+    Set oFso = CreateObject("Scripting.FileSystemObject")
+    If oFso.FileExists(managerlist) Then
+        Dim mCtr: mCtr = 0
+        Dim nCtr: nCtr = 0
+        Dim arrLine, sLine
+        Set reader = oFso.OpenTextFile(managerlist, ForReading, True)
+        Do Until reader.AtEndOfStream
+            sLine = reader.Readline
+            arrLine = Split(sLine, "|", -1, 1)
+            mngrName = Trim(arrLine(1))
+            If MatchManager(objExcel, _
+                            objWorkbook, _
+                            outputDir, _
+                            mngrName, _
+                            srcSheet1, _
+                            srcSheet2, _
+                            srcSheet3) = True then
+                'WScript.echo "[" & Now & "]" & ": " & mngrName & Chr(9) & "Match"
+                mCtr = mCtr + 1
+            Else
+                WScript.echo "[" & Now & "]" & ": " & mngrName & Chr(9) & "*No Match*"
+                nCtr = nCtr + 1
+            End if
+        Loop
+        reader.close
+        Set reader = nothing
+        Set oFso = Nothing
+    Else
+        WScript.echo "[" & Now & "]" & ": " & managerlist & " Does not Exist"
+    End If
+    
+    objWorkbook.Close
+    objExcel.Quit
+    Set objExcel = Nothing
+    Set objWorkbook = Nothing
+    
+    ExtractPracticeReport = mCtr & "|" & nCtr
 End Function
 
 Function MatchManager(excelObject, _
-					  workbookObject, _
-					  byval outputDir, _
-					  byval ManagerName, _
-					  byval srcSheet1, _
-					  byval srcSheet2, _
-					  byval srcSheet3)
-	Dim objWorksheet, srcRange
-	Dim objTgtWorkbook, objTgtWorksheet
-	
-	Dim fIsFound1: fIsFound1 = 0
-	Dim fIsFound2: fIsFound2 = 0
-	Dim fIsFound3: fIsFound3 = 0
-	
-	'Let's create the output workbook
-	Set objTgtWorkbook = excelObject.Workbooks.Add
-	'==================================================
-	'Summary Processing. Read and Copy to new Worksheet
-	'==================================================
-	Set objWorksheet = workbookObject.Worksheets(srcSheet1) 
-	Set srcRange = objWorksheet.Range("A1:L1")
-	With objWorksheet
-		If .AutoFilterMode = False Then srcRange.AutoFilter
-		.Range("A1:L1").AutoFilter
-		.Range("A1:L1").AutoFilter 12, "=" & ManagerName
-	End With
-	
-	fIsFound1 = objWorksheet.AutoFilter.Range.Columns(1).SpecialCells(xlCellTypeVisible).Count
-	If fIsFound1 > 1 then
-		Set objTgtWorksheet = objTgtWorkbook.Worksheets(1) 'Default Sheet1
-		objTgtWorksheet.Name = srcSheet1
-		objWorksheet.AutoFilter.Range.Copy objTgtWorksheet.Range("A1")
-		objTgtWorksheet.Columns("L").EntireColumn.Delete
-		objTgtWorksheet.Cells.EntireColumn.AutoFit
-	End If
-	
-	'==================================================
-	'Detailed Entry Exit Pair Processing.
-	'==================================================
-	Set objWorksheet = workbookObject.Worksheets(srcSheet2)
-	Set srcRange = objWorksheet.Range("A1:L1")
-	With objWorksheet
-		If .AutoFilterMode = False Then srcRange.AutoFilter
-		.Range("A1:L1").AutoFilter
-		.Range("A1:L1").AutoFilter 12, "=" & ManagerName
-	End With
-	fIsFound2 = objWorksheet.AutoFilter.Range.Columns(1).SpecialCells(xlCellTypeVisible).Count
-	If fIsFound2 > 1 then
-		Set objTgtWorksheet = objTgtWorkbook.Worksheets(2) 'Default Sheet2
-		objTgtWorksheet.Name = srcSheet2
-		objWorksheet.AutoFilter.Range.Copy objTgtWorksheet.Range("A1")
-		objTgtWorksheet.Columns("J:L").EntireColumn.Delete
-		objTgtWorksheet.Cells.EntireColumn.AutoFit
-	End If
+                      workbookObject, _
+                      byval outputDir, _
+                      byval ManagerName, _
+                      byval srcSheet1, _
+                      byval srcSheet2, _
+                      byval srcSheet3)
+    Dim objWorksheet, srcRange
+    Dim objTgtWorkbook, objTgtWorksheet
+    
+    Dim fIsFound1: fIsFound1 = 0
+    Dim fIsFound2: fIsFound2 = 0
+    Dim fIsFound3: fIsFound3 = 0
+    
+    'Let's create the output workbook
+    Set objTgtWorkbook = excelObject.Workbooks.Add
+    '==================================================
+    'Summary Processing. Read and Copy to new Worksheet
+    '==================================================
+    Set objWorksheet = workbookObject.Worksheets(srcSheet1) 
+    Set srcRange = objWorksheet.Range("A1:N1")
+    With objWorksheet
+        If .AutoFilterMode = False Then srcRange.AutoFilter
+        .Range("A1:N1").AutoFilter
+        'When adjusting for new columns, adjust column position below to filter properly.
+        .Range("A1:N1").AutoFilter 14, "=" & ManagerName
+    End With
+    
+    fIsFound1 = objWorksheet.AutoFilter.Range.Columns(1).SpecialCells(xlCellTypeVisible).Count
+    If fIsFound1 > 1 then
+        Set objTgtWorksheet = objTgtWorkbook.Worksheets(1) 'Default Sheet1
+        objTgtWorksheet.Name = srcSheet1
+        objWorksheet.AutoFilter.Range.Copy objTgtWorksheet.Range("A1")
+        objTgtWorksheet.Columns("A:N").Sort objTgtWorksheet.Range("C1"), xlAscending, objTgtWorksheet.Range("E1"), , xlAscending, , , XlYes
+        objTgtWorksheet.Columns("N").EntireColumn.Delete
+        objTgtWorksheet.Cells.EntireColumn.AutoFit
+    End If
+    
+    '==================================================
+    'Detailed Entry Exit Pair Processing.
+    '==================================================
+    Set objWorksheet = workbookObject.Worksheets(srcSheet2)
+    Set srcRange = objWorksheet.Range("A1:L1")
+    With objWorksheet
+        If .AutoFilterMode = False Then srcRange.AutoFilter
+        .Range("A1:L1").AutoFilter
+        .Range("A1:L1").AutoFilter 12, "=" & ManagerName
+    End With
+    fIsFound2 = objWorksheet.AutoFilter.Range.Columns(1).SpecialCells(xlCellTypeVisible).Count
+    If fIsFound2 > 1 then
+        Set objTgtWorksheet = objTgtWorkbook.Worksheets(2) 'Default Sheet2
+        objTgtWorksheet.Name = srcSheet2
+        objWorksheet.AutoFilter.Range.Copy objTgtWorksheet.Range("A1")
+        objTgtWorksheet.Columns("A:L").Sort objTgtWorksheet.Range("C1"), xlAscending, objTgtWorksheet.Range("E1"), , xlAscending, , , XlYes
+        objTgtWorksheet.Columns("J:L").EntireColumn.Delete
+        objTgtWorksheet.Cells.EntireColumn.AutoFit
+    End If
 
-	'==================================================
-	'Detailed Raw Processing.
-	'==================================================
-	Set objWorksheet = workbookObject.Worksheets(srcSheet3) 
-	Set srcRange = objWorksheet.Range("A1:I1")
-	With objWorksheet
-		If .AutoFilterMode = False Then srcRange.AutoFilter
-		.Range("A1:I1").AutoFilter
-		.Range("A1:I1").AutoFilter 9, "=" & ManagerName
-	End With
-	fIsFound3 = objWorksheet.AutoFilter.Range.Columns(1).SpecialCells(xlCellTypeVisible).Count
-	If fIsFound3 > 1 then
-		Set objTgtWorksheet = objTgtWorkbook.Worksheets(3) 'Default Sheet3
-		objTgtWorksheet.Name = srcSheet3
-		objWorksheet.AutoFilter.Range.Copy objTgtWorksheet.Range("A1")
-		objTgtWorksheet.Columns("I").EntireColumn.Delete
-		objTgtWorksheet.Cells.EntireColumn.AutoFit
-	End If
+    '==================================================
+    'Detailed Raw Processing.
+    '==================================================
+    Set objWorksheet = workbookObject.Worksheets(srcSheet3) 
+    Set srcRange = objWorksheet.Range("A1:I1")
+    With objWorksheet
+        If .AutoFilterMode = False Then srcRange.AutoFilter
+        .Range("A1:I1").AutoFilter
+        .Range("A1:I1").AutoFilter 9, "=" & ManagerName
+    End With
+    fIsFound3 = objWorksheet.AutoFilter.Range.Columns(1).SpecialCells(xlCellTypeVisible).Count
+    If fIsFound3 > 1 then
+        Set objTgtWorksheet = objTgtWorkbook.Worksheets(3) 'Default Sheet3
+        objTgtWorksheet.Name = srcSheet3
+        objWorksheet.AutoFilter.Range.Copy objTgtWorksheet.Range("A1")
+        objTgtWorksheet.Columns("A:I").Sort objTgtWorksheet.Range("C1"), xlAscending, objTgtWorksheet.Range("B1"), , xlAscending, , , XlYes
+        objTgtWorksheet.Columns("I").EntireColumn.Delete
+        objTgtWorksheet.Cells.EntireColumn.AutoFit
+    End If
 
-	If fIsFound1 > 1 Or fIsFound2 > 1 Or fIsFound3 > 1 Then
-		objTgtWorkbook.Close True, outputDir & "\" & a_batchid & Space(1) & a_MngrTag & Space(1) & ManagerName
-		MatchManager = True
-	Else
-		MatchManager = False
-	End If
-	
-	Set srcRange = Nothing
-	Set objWorksheet = Nothing
-	Set objTgtWorkbook = Nothing
-	Set objTgtWorksheet = Nothing
+    If fIsFound1 > 1 Or fIsFound2 > 1 Or fIsFound3 > 1 Then
+        objTgtWorkbook.Close True, outputDir & "\" & a_batchid & Space(1) & a_MngrTag & Space(1) & ManagerName
+        MatchManager = True
+    Else
+        MatchManager = False
+    End If
+    
+    Set srcRange = Nothing
+    Set objWorksheet = Nothing
+    Set objTgtWorkbook = Nothing
+    Set objTgtWorksheet = Nothing
 End Function
 
 Function RenameFile(byval inFile, byval outFile)
-	Dim oFSO 
-	Set oFSO = CreateObject("Scripting.FileSystemObject")
-	If oFSO.FileExists(inFile) Then
+    Dim oFSO 
+    Set oFSO = CreateObject("Scripting.FileSystemObject")
+    If oFSO.FileExists(inFile) Then
         oFSO.CopyFile inFile, outFile, True
-	Else
-		WScript.echo "[" & Now & "]" & ": " & inFile & " Does not Exist"
-	End If
-	Set oFSO = Nothing
+    Else
+        WScript.echo "[" & Now & "]" & ": " & inFile & " Does not Exist"
+    End If
+    Set oFSO = Nothing
 End Function
 
 Function CheckFileExist(byval path)
-	Dim fso
-	Set fso = CreateObject("Scripting.FileSystemObject")
-	If fso.FileExists(path) Then
-		Set fso = Nothing
-		CheckFileExist = True
-	Else
-		Set fso = Nothing
-		CheckFileExist = False
-	End If
+    Dim fso
+    Set fso = CreateObject("Scripting.FileSystemObject")
+    If fso.FileExists(path) Then
+        Set fso = Nothing
+        CheckFileExist = True
+    Else
+        Set fso = Nothing
+        CheckFileExist = False
+    End If
 End Function
 
 Function CheckFolderExist(byval fldr)
    Dim fso
    Set fso = CreateObject("Scripting.FileSystemObject")
    If fso.FolderExists(fldr) Then
-		Set fso = Nothing
-		CheckFolderExist = True
+        Set fso = Nothing
+        CheckFolderExist = True
    Else
-		Set fso = Nothing
-		CheckFolderExist = False
+        Set fso = Nothing
+        CheckFolderExist = False
    End If
 End Function
 
 Function SpliceFileName(byval fname, byval mode)
 If Len(fname) > 0 Then
-	If mode = C_EXTNAME Then
-		SpliceFileName = Right(fname,Len(Trim(fname)) - InStr(fname,"."))
-	End If
-	If mode = C_FILENAME Then
-		SpliceFileName = Left(fname,Len(Trim(fname)) - (Len(Trim(fname)) - InStr(fname,".")+1))
-	End If
-	If mode = C_PATH Then
-		SpliceFileName = Left(fname,InstrRev(fname,"\")-1)
-	End If
+    If mode = C_EXTNAME Then
+        SpliceFileName = Right(fname,Len(Trim(fname)) - InStr(fname,"."))
+    End If
+    If mode = C_FILENAME Then
+        SpliceFileName = Left(fname,Len(Trim(fname)) - (Len(Trim(fname)) - InStr(fname,".")+1))
+    End If
+    If mode = C_PATH Then
+        SpliceFileName = Left(fname,InstrRev(fname,"\")-1)
+    End If
 End If
 End Function
 
 REM Function IsoDate(byval dt)
-	REM IsoDate = ((year(dt)*100 + month(dt))*100 + day(dt))*10000 + hour(dt)*100 + minute(dt)
+    REM IsoDate = ((year(dt)*100 + month(dt))*100 + day(dt))*10000 + hour(dt)*100 + minute(dt)
 REM End Function
 
 Function CopyFile(byval inFile, byval outFile)
-	Dim oFSO 
-	Set oFSO = CreateObject("Scripting.FileSystemObject")
-	If oFSO.FileExists(inFile) Then
+    Dim oFSO 
+    Set oFSO = CreateObject("Scripting.FileSystemObject")
+    If oFSO.FileExists(inFile) Then
         oFSO.CopyFile inFile, outFile, True
-	Else
-		WScript.echo "[" & Now & "]" & ": " & inFile & " Does not Exist"
-	End If
-	Set oFSO = Nothing
+    Else
+        WScript.echo "[" & Now & "]" & ": " & inFile & " Does not Exist"
+    End If
+    Set oFSO = Nothing
 End Function
 
 Function GetElapsedTime
@@ -470,8 +481,8 @@ Function GetElapsedTime
     Const SECONDS_IN_WEEK = 604800
  
     Dim dtmEndTime: dtmEndTime = Timer
-	Dim seconds, minutes, hours, days
-	
+    Dim seconds, minutes, hours, days
+    
     seconds = Round(dtmEndTime - dtmStartTime, 2)
     If seconds < SECONDS_IN_MINUTE Then
         GetElapsedTime = seconds & " seconds "
@@ -501,9 +512,9 @@ Function GetElapsedTime
 End Function
 
 Function GetAppDataDir
-	Dim objShell, appDataDir
-	Set objShell = CreateObject( "WScript.Shell" )
-	appDataDir = objShell.ExpandEnvironmentStrings("%APPDATA%")
-	Set objShell = nothing
-	GetAppDataDir = appDataDir
+    Dim objShell, appDataDir
+    Set objShell = CreateObject( "WScript.Shell" )
+    appDataDir = objShell.ExpandEnvironmentStrings("%APPDATA%")
+    Set objShell = nothing
+    GetAppDataDir = appDataDir
 End Function
