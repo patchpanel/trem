@@ -209,7 +209,6 @@ Function MatchEmployee(byval EmployeeName, byval ManagerName)
     If fIsFound1 > 1 then
         lastRow = objWorksheet.Range("A1").CurrentRegion.Rows.Count
         objWorksheet.Range("N2:N" & lastRow).value = ManagerName
-        'objWorksheet.Columns("G").Replace " ",""
         If objWorksheet.AutoFilterMode Then objWorksheet.AutoFilter.ShowAllData
     End If
     
@@ -352,6 +351,7 @@ Function MatchManager(excelObject, _
         Set objTgtWorksheet = objTgtWorkbook.Worksheets(1) 'Default Sheet1
         objTgtWorksheet.Name = srcSheet1
         objWorksheet.AutoFilter.Range.Copy objTgtWorksheet.Range("A1")
+		'Sort by Name and Date
         objTgtWorksheet.Columns("A:N").Sort objTgtWorksheet.Range("C1"), xlAscending, objTgtWorksheet.Range("E1"), , xlAscending, , , XlYes
         objTgtWorksheet.Columns("N").EntireColumn.Delete
         objTgtWorksheet.Cells.EntireColumn.AutoFit
@@ -372,6 +372,7 @@ Function MatchManager(excelObject, _
         Set objTgtWorksheet = objTgtWorkbook.Worksheets(2) 'Default Sheet2
         objTgtWorksheet.Name = srcSheet2
         objWorksheet.AutoFilter.Range.Copy objTgtWorksheet.Range("A1")
+		'Sort by Name and Date
         objTgtWorksheet.Columns("A:L").Sort objTgtWorksheet.Range("C1"), xlAscending, objTgtWorksheet.Range("E1"), , xlAscending, , , XlYes
         objTgtWorksheet.Columns("J:L").EntireColumn.Delete
         objTgtWorksheet.Cells.EntireColumn.AutoFit
@@ -392,6 +393,7 @@ Function MatchManager(excelObject, _
         Set objTgtWorksheet = objTgtWorkbook.Worksheets(3) 'Default Sheet3
         objTgtWorksheet.Name = srcSheet3
         objWorksheet.AutoFilter.Range.Copy objTgtWorksheet.Range("A1")
+		'Sort by Name and Date
         objTgtWorksheet.Columns("A:I").Sort objTgtWorksheet.Range("C1"), xlAscending, objTgtWorksheet.Range("B1"), , xlAscending, , , XlYes
         objTgtWorksheet.Columns("I").EntireColumn.Delete
         objTgtWorksheet.Cells.EntireColumn.AutoFit

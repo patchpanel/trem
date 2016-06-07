@@ -217,6 +217,7 @@ Function MatchEmployee(excelObject, _
         Set objTgtWorksheet = objTgtWorkbook.Worksheets(1) 'Default Sheet1
         objTgtWorksheet.Name = srcSheet1
         objWorksheet.AutoFilter.Range.Copy objTgtWorksheet.Range("A1")
+		'Sort by Name and Date
 		objTgtWorksheet.Columns("A:G").Sort objTgtWorksheet.Range("C1"), xlAscending, objTgtWorksheet.Range("E1"), , xlAscending, , , XlYes
         objTgtWorksheet.Cells.EntireColumn.AutoFit
     End If
@@ -236,6 +237,7 @@ Function MatchEmployee(excelObject, _
         Set objTgtWorksheet = objTgtWorkbook.Worksheets(2) 'Default Sheet2
         objTgtWorksheet.Name = srcSheet2
         objWorksheet.AutoFilter.Range.Copy objTgtWorksheet.Range("A1")
+		'Sort by Name and Date
 		objTgtWorksheet.Columns("A:K").Sort objTgtWorksheet.Range("C1"), xlAscending, objTgtWorksheet.Range("E1"), , xlAscending, , , XlYes
         objTgtWorksheet.Cells.EntireColumn.AutoFit
     End If
@@ -255,6 +257,7 @@ Function MatchEmployee(excelObject, _
         Set objTgtWorksheet = objTgtWorkbook.Worksheets(3) 'Default Sheet3
         objTgtWorksheet.Name = srcSheet3
         objWorksheet.AutoFilter.Range.Copy objTgtWorksheet.Range("A1")
+		'Sort by Name and Date
 		objTgtWorksheet.Columns("A:H").Sort objTgtWorksheet.Range("C1"), xlAscending, objTgtWorksheet.Range("B1"), , xlAscending, , , XlYes
         objTgtWorksheet.Cells.EntireColumn.AutoFit
     End If

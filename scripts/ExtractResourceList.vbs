@@ -1,3 +1,11 @@
+'============================================================================
+'REVISIONS:
+'DATE       Description
+'2016-06-03 Delete blank lines from Excel worksheet so it will not produce
+'           Blank row upon extract
+'2016-06-07 Change Filter from QLID to Name since MS transition required
+'           a single QLID assigned to different managers
+'============================================================================
 '"cscript.exe" "c:\trem\bin/ExtractResourceList.vbs" "c:\trem\in/GDC Manila Resource List template v1 0.xlsx" "c:\trem\in/ResourceList.txt" "c:\trem\in/ManagersList.txt" "201604"
 Option Explicit
 
@@ -19,6 +27,7 @@ Const xlYes = 1
 Const xlFilterCopy = 2 'Copy filtered data to new location.
 Const xlFilterInPlace = 1 'Leave data in place.
 Const xlCellTypeVisible = 12
+Const xlCellTypeBlanks = 4
 
 'cscript c:\atri\bin\ExtractResourceList.vbs "C:\atri\in\GDC Manila Resource List template v1 0.xlsx" "ResourceList.txt" "ManagerList.txt" "201603"
 Dim dtmStartTime: dtmStartTime = Timer
@@ -78,7 +87,7 @@ Wscript.Quit
 
 Function ExtractResourceList(inFile, outFile)
 	Dim objExcel, objWorkbook, objWorksheet
-	Dim objRange, objRange2
+	Dim objRange, objRange2, objRange3
 	
 	Set objExcel = CreateObject("Excel.Application")
 	objExcel.Visible = False
@@ -103,6 +112,9 @@ Function ExtractResourceList(inFile, outFile)
 	'Continue if ok
 	Set objRange2 = objExcel.Range("D1")
 	objRange.Sort objRange2, xlAscending, , , , , , xlYes
+	'Delete Blank Rows before extracting
+	Set objRange3 = objExcel.Range("A:A")
+	objRange3.SpecialCells(xlCellTypeBlanks).EntireRow.Delete
 	'Save it
 	objWorkbook.SaveAs outFile, xlText
 	'Clean it
@@ -132,7 +144,8 @@ Function ExtractManagers(inFile, outFile)
 	objWorksheet.Columns("C").EntireColumn.Delete
 	'Filter Uniquely
 	rowCount = objWorksheet.Range("A1").CurrentRegion.Rows.Count
-	Set objRange2 = objExcel.Range("A1:A" & rowCount)
+	'Filter Unique by Name. Previously by QLID.
+	Set objRange2 = objExcel.Range("B1:B" & rowCount)
 	objRange2.AdvancedFilter xlFilterInPlace, , , True
 	'Delete hidden rows
 	Dim i
@@ -142,6 +155,9 @@ Function ExtractManagers(inFile, outFile)
 	'Sort results
 	Set objRange = objWorksheet.UsedRange
 	objRange.Sort objRange2, xlAscending, , , , , , xlYes
+	'Delete Blank Rows before extracting
+	Set objRange3 = objExcel.Range("A:A")
+	objRange3.SpecialCells(xlCellTypeBlanks).EntireRow.Delete
 	'Export to Text file
 	objWorkbook.SaveAs outFile, xlText
 	'Cleanup
