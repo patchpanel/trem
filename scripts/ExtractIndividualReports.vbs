@@ -2,6 +2,8 @@
 'REVISIONS:
 'DATE       Description
 '2016-05-31 Added column sorting for Names and dates since input file sometimes does not come in sorted
+'2017-07-06 Updated MatchEmployee function to add target named worksheets instead of a default numeric assigned one.
+'           e.g. Sheet1, Sheet2. It seems that Excel 2016 does not allow numeric assigments of worksheets
 '============================================================================
 '"cscript.exe" "c:\trem\bin/ExtractIndividualReports.vbs" "c:\trem\in/ResourceList.txt" "c:\trem\in/201603 - BDG_TimeReport_V2.xlsx" "Summary" "Detailed Entry Exit Pair" "Detailed Raw" "C:\trem\out" "201604"
 Option Explicit
@@ -234,7 +236,8 @@ Function MatchEmployee(excelObject, _
     End With
     fIsFound2 = objWorksheet.AutoFilter.Range.Columns(1).SpecialCells(xlCellTypeVisible).Count
     If fIsFound2 > 1 then
-        Set objTgtWorksheet = objTgtWorkbook.Worksheets(2) 'Default Sheet2
+        'Set objTgtWorksheet = objTgtWorkbook.Worksheets(2) 'Default Sheet2
+		Set objTgtWorksheet = objTgtWorkbook.Worksheets.Add
         objTgtWorksheet.Name = srcSheet2
         objWorksheet.AutoFilter.Range.Copy objTgtWorksheet.Range("A1")
 		'Sort by Name and Date
@@ -254,7 +257,8 @@ Function MatchEmployee(excelObject, _
     End With
     fIsFound3 = objWorksheet.AutoFilter.Range.Columns(1).SpecialCells(xlCellTypeVisible).Count
     If fIsFound3 > 1 then
-        Set objTgtWorksheet = objTgtWorkbook.Worksheets(3) 'Default Sheet3
+        'Set objTgtWorksheet = objTgtWorkbook.Worksheets(3) 'Default Sheet3
+		Set objTgtWorksheet = objTgtWorkbook.Worksheets.Add
         objTgtWorksheet.Name = srcSheet3
         objWorksheet.AutoFilter.Range.Copy objTgtWorksheet.Range("A1")
 		'Sort by Name and Date

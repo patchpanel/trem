@@ -120,6 +120,8 @@ Function ExtractResourceList(inFile, outFile)
 	'Clean it
 	objWorkbook.Close
 	objExcel.Quit
+	
+	Set objExcel = Nothing
 End Function
 
 Function ExtractManagers(inFile, outFile)
@@ -163,6 +165,8 @@ Function ExtractManagers(inFile, outFile)
 	'Cleanup
 	objWorkbook.Close
 	objExcel.Quit
+	
+	Set objExcel = Nothing
 End Function
 
 Function CleanResourceList(byval inFile, byval outFile)
